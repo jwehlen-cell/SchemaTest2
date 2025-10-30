@@ -1,0 +1,566 @@
+TABLE: CHANNEL_SEGMENT
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ CHANNEL_SEGMENT_CREATION_UUID                      RAW(16)
+ REFERENCE_ID                                       RAW(16)
+ CREATION_TIME                                      TIMESTAMP(6)
+ CHAN_CANONICAL_NAME                                VARCHAR2(32)
+ CHAN_EFFECTIVE_AT                                  TIMESTAMP(6)
+ TIME_SERIES_TYPE                                   VARCHAR2(32)
+ START_TIME                                         TIMESTAMP(6)
+ END_TIME                                           TIMESTAMP(6)
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: CHANNEL_SEGMENT_CREATION
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ OBJECT                                             CLOB
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: CHANNEL_SEGMENT_PROC_MASK_XREF
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ CHANNEL_SEGMENT_UUID                               RAW(16)
+ PROCESSING_MASK_UUID                               RAW(16)
+ ISCURRENT                                          VARCHAR2(1)
+ MODDATE                                            TIMESTAMP(6)
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: CHANNEL_SEGMENT_WAVEFORM
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ CHANNEL_SEGMENT_UUID                               RAW(16)
+ WFID                                               NUMBER(18)
+ ISCURRENT                                          VARCHAR2(1)
+ MODDATE                                            TIMESTAMP(6)
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: EVENT
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ REMARK_GID                                         RAW(16)
+ MONITORING_ORGANIZATION                            VARCHAR2(32)
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: EVENT_CORRELATION
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ SOURCE_EVENT_HYPOTHESIS_UUID                       RAW(16)
+ SIMILAR_EVENT_HYPOTHESIS_UUID                      RAW(16)
+ SOURCE_EVENT_CHANNEL_SEGMENT_GID                   RAW(16)
+ SIMILAR_EVENT_CHANNEL_SEGMENT_GID                  RAW(16)
+ STA_NAME                                           VARCHAR2(6)
+ STA_EFFECTIVE_AT                                   TIMESTAMP(6)
+ CHAN_LIST                                          VARCHAR2(2000)
+ FILTERID                                           NUMBER(18)
+ SCAN_TYPE                                          VARCHAR2(32)
+ SCAN_STAGES                                        VARCHAR2(32)
+ CORRELATION_COEFFICIENT                            BINARY_FLOAT
+ AUTHOR                                             VARCHAR2(32)
+ STAGE                                              VARCHAR2(32)
+ ISCURRENT                                          VARCHAR2(1)
+ MODDATE                                            TIMESTAMP(6)
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: EVENT_CORRELATION_CHANNEL_SEGMENT
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ CHANNEL_SEGMENT_GID                       NOT NULL RAW(16)
+ CHAN_CANONICAL_NAME                                VARCHAR2(32)
+ CHAN_EFFECTIVE_AT                                  TIMESTAMP(6)
+ TIME_SERIES_TYPE                                   VARCHAR2(32)
+ START_TIME                                         TIMESTAMP(6)
+ END_TIME                                           TIMESTAMP(6)
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: EVENT_HYPOTHESIS
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ EVENT_UUID                                         RAW(16)
+ PREFERRED_LOCATION_SOLUTION_UUID                   RAW(16)
+ REMARK_GID                                         RAW(16)
+ DELETED                                            VARCHAR2(1)
+ REJECTED                                           VARCHAR2(1)
+ PREFERRED_BY                                       VARCHAR2(32)
+ AUTHOR                                             VARCHAR2(32)
+ STAGE                                              VARCHAR2(32)
+ ISCURRENT                                          VARCHAR2(1)
+ MODDATE                                            TIMESTAMP(6)
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: EVENT_HYPOTHESIS_TAG
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ EVENT_HYPOTHESIS_UUID                     NOT NULL RAW(16)
+ TAG                                                VARCHAR2(32)
+ AUTHOR                                             VARCHAR2(32)
+ STAGE                                              VARCHAR2(32)
+ ISCURRENT                                          VARCHAR2(1)
+ MODDATE                                            TIMESTAMP(6)
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: EVENT_STATUS_INFO
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ EVENT_UUID                                         RAW(16)
+ EVENT_STATUS                                       VARCHAR2(16)
+ ACTIVE_ANALYST_IDS                                 VARCHAR2(256)
+ STAGE                                              VARCHAR2(32)
+ ISCURRENT                                          VARCHAR2(1)
+ MODDATE                                            TIMESTAMP(6)
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: FEATURE_MEASUREMENT_AMPLITUDE
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ SIG_DET_HYPO_GID                                   RAW(16)
+ MEASURED_CHANNEL_SEGMENT_UUID                      RAW(16)
+ ANALYSIS_CHANNEL_SEGMENT_UUID                      RAW(16)
+ FILTERID                                           NUMBER(18)
+ FILTER_USAGE                                       VARCHAR2(32)
+ CHAN_CANONICAL_NAME                                VARCHAR2(32)
+ CHAN_EFFECTIVE_AT                                  TIMESTAMP(6)
+ MEASUREMENT_TYPE                                   VARCHAR2(20)
+ AMPLITUDE                                          BINARY_FLOAT
+ PERIOD                                             BINARY_FLOAT
+ UNITS                                              VARCHAR2(32)
+ CLIPPED                                            VARCHAR2(1)
+ MEASUREMENT_WINDOW_START_TIME                      TIMESTAMP(6)
+ MEASUREMENT_WINDOW_DURATION                        BINARY_FLOAT
+ MEASUREMENT_TIME                                   TIMESTAMP(6)
+ SNR                                                BINARY_FLOAT
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: FEATURE_MEASUREMENT_ARRIVAL_TIME
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ SIG_DET_HYPO_GID                                   RAW(16)
+ MEASURED_CHANNEL_SEGMENT_UUID                      RAW(16)
+ ANALYSIS_CHANNEL_SEGMENT_UUID                      RAW(16)
+ FILTERID                                           NUMBER(18)
+ FILTER_USAGE                                       VARCHAR2(32)
+ CHAN_CANONICAL_NAME                                VARCHAR2(32)
+ CHAN_EFFECTIVE_AT                                  TIMESTAMP(6)
+ MEASUREMENT_TYPE                                   VARCHAR2(27)
+ ARRIVAL_TIME                                       TIMESTAMP(6)
+ STANDARD_DEVIATION                                 BINARY_FLOAT
+ SNR                                                BINARY_FLOAT
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: FEATURE_MEASUREMENT_ENUMERATED
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ SIG_DET_HYPO_GID                                   RAW(16)
+ MEASURED_CHANNEL_SEGMENT_UUID                      RAW(16)
+ ANALYSIS_CHANNEL_SEGMENT_UUID                      RAW(16)
+ FILTERID                                           NUMBER(18)
+ FILTER_USAGE                                       VARCHAR2(32)
+ CHAN_CANONICAL_NAME                                VARCHAR2(32)
+ CHAN_EFFECTIVE_AT                                  TIMESTAMP(6)
+ MEASUREMENT_TYPE                                   VARCHAR2(20)
+ MEASURED_VALUE                                     VARCHAR2(13)
+ CONFIDENCE                                         BINARY_FLOAT
+ REFERENCE_TIME                                     TIMESTAMP(6)
+ SNR                                                BINARY_FLOAT
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: FEATURE_MEASUREMENT_NUMERIC
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ SIG_DET_HYPO_GID                                   RAW(16)
+ MEASURED_CHANNEL_SEGMENT_UUID                      RAW(16)
+ ANALYSIS_CHANNEL_SEGMENT_UUID                      RAW(16)
+ FILTERID                                           NUMBER(18)
+ FILTER_USAGE                                       VARCHAR2(32)
+ CHAN_CANONICAL_NAME                                VARCHAR2(32)
+ CHAN_EFFECTIVE_AT                                  TIMESTAMP(6)
+ MEASUREMENT_TYPE                                   VARCHAR2(27)
+ MEASURED_VALUE                                     BINARY_FLOAT
+ UNITS                                              VARCHAR2(32)
+ STANDARD_DEVIATION                                 BINARY_FLOAT
+ REFERENCE_TIME                                     TIMESTAMP(6)
+ SNR                                                BINARY_FLOAT
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: FEATURE_PREDICTION_ARRIVAL_TIME
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ LOCATION_BEHAVIOR_UUID                             RAW(16)
+ CHAN_CANONICAL_NAME                                VARCHAR2(32)
+ CHAN_EFFECTIVE_AT                                  TIMESTAMP(6)
+ PHASE                                              VARCHAR2(8)
+ PREDICTION_TYPE                                    VARCHAR2(27)
+ ARRIVAL_TIME                                       TIMESTAMP(6)
+ TRAVEL_TIME                                        BINARY_FLOAT
+ STANDARD_DEVIATION                                 BINARY_FLOAT
+ EXTRAPOLATED                                       VARCHAR2(1)
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: FEATURE_PREDICTION_COMPONENT
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ FEATURE_PREDICTION_UUID                            RAW(16)
+ PREDICTION_COMPONENT_TYPE                          VARCHAR2(35)
+ VALUE                                              BINARY_FLOAT
+ EXTRAPOLATED                                       VARCHAR2(1)
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: FEATURE_PREDICTION_NUMERIC
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ LOCATION_BEHAVIOR_UUID                             RAW(16)
+ CHAN_CANONICAL_NAME                                VARCHAR2(32)
+ CHAN_EFFECTIVE_AT                                  TIMESTAMP(6)
+ PHASE                                              VARCHAR2(8)
+ PREDICTION_TYPE                                    VARCHAR2(27)
+ PREDICTED_VALUE                                    BINARY_FLOAT
+ UNITS                                              VARCHAR2(32)
+ STANDARD_DEVIATION                                 BINARY_FLOAT
+ EXTRAPOLATED                                       VARCHAR2(1)
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: INTERVAL
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ INTERVAL_GID                                       RAW(16)
+ REMARK_GID                                         RAW(16)
+ STATUS                                             VARCHAR2(16)
+ START_TIME                                         TIMESTAMP(6)
+ END_TIME                                           TIMESTAMP(6)
+ PROCESSING_START_TIME                              TIMESTAMP(6)
+ PROCESSING_END_TIME                                TIMESTAMP(6)
+ PERCENT_COMPLETED                                  BINARY_FLOAT
+ ACTIVE_ANALYST_IDS                                 VARCHAR2(256)
+ RESERVED_ANALYST_ID                                VARCHAR2(32)
+ COMPLETED_ANALYST_ID                               VARCHAR2(32)
+ AUTHOR                                             VARCHAR2(32)
+ STAGE                                              VARCHAR2(32)
+ STAGE_MODE                                         VARCHAR2(32)
+ SUB_STAGE                                          VARCHAR2(64)
+ LAST_EXECUTED_STEP_NAME                            VARCHAR2(32)
+ ISCURRENT                                          VARCHAR2(1)
+ MODDATE                                            TIMESTAMP(6)
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: LOCATION_BEHAVIOR
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ LOCATION_SOLUTION_UUID                             RAW(16)
+ SIG_DET_HYPO_GID                                   RAW(16)
+ FEATURE_MEASUREMENT_UUID                           RAW(16)
+ FEATURE_PREDICTION_UUID                            RAW(16)
+ VALUE_TYPE                                         VARCHAR2(12)
+ DEFINING                                           VARCHAR2(1)
+ REQUESTED_DEFINING                                 VARCHAR2(1)
+ RESIDUAL                                           BINARY_FLOAT
+ WEIGHT                                             BINARY_FLOAT
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: LOCATION_RESTRAINT
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ LOCATION_SOLUTION_UUID                             RAW(16)
+ DEPTH_RESTRAINT_TYPE                               VARCHAR2(12)
+ DEPTH_RESTRAINT_KM                                 BINARY_FLOAT
+ DEPTH_RESTRAINT_REASON                             VARCHAR2(51)
+ EPICENTER_RESTRAINT_TYPE                           VARCHAR2(12)
+ LATITUDE_RESTRAINT_DEG                             BINARY_FLOAT
+ LONGITUDE_RESTRAINT_DEG                            BINARY_FLOAT
+ TIME_RESTRAINT_TYPE                                VARCHAR2(12)
+ TIME_RESTRAINT                                     TIMESTAMP(6)
+ RESTRAINER                                         VARCHAR2(22)
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: LOCATION_SOLUTION
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ EVENT_HYPOTHESIS_UUID                              RAW(16)
+ REMARK_GID                                         RAW(16)
+ LAT                                                BINARY_FLOAT
+ LON                                                BINARY_FLOAT
+ DEPTH                                              BINARY_FLOAT
+ TIME                                               TIMESTAMP(6)
+ GRN                                                NUMBER(8)
+ SRN                                                NUMBER(8)
+ ALGORITHM                                          VARCHAR2(15)
+ AUTHOR                                             VARCHAR2(32)
+ STAGE                                              VARCHAR2(32)
+ ISCURRENT                                          VARCHAR2(1)
+ MODDATE                                            TIMESTAMP(6)
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: LOCATION_UNCERTAINTY
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ LOCATION_SOLUTION_UUID                             RAW(16)
+ REMARK_GID                                         RAW(16)
+ XX                                                 BINARY_FLOAT
+ YY                                                 BINARY_FLOAT
+ ZZ                                                 BINARY_FLOAT
+ TT                                                 BINARY_FLOAT
+ XY                                                 BINARY_FLOAT
+ XZ                                                 BINARY_FLOAT
+ YZ                                                 BINARY_FLOAT
+ TX                                                 BINARY_FLOAT
+ TY                                                 BINARY_FLOAT
+ TZ                                                 BINARY_FLOAT
+ STD_DEV_TRAVEL_TIME_RESIDUALS                      BINARY_FLOAT
+ STAGE                                              VARCHAR2(32)
+ ISCURRENT                                          VARCHAR2(1)
+ MODDATE                                            TIMESTAMP(6)
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: LOCATION_UNCERTAINTY_ELLIPSE
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ LOCATION_UNCERTAINTY_UUID                          RAW(16)
+ SCALING_FACTOR_TYPE                                VARCHAR2(32)
+ K_WEIGHT                                           BINARY_FLOAT
+ CONFIDENCE_LEVEL                                   BINARY_FLOAT
+ APRIORI_VARIANCE                                   BINARY_FLOAT
+ SEMI_MAJOR_AXIS_LENGTH_KM                          BINARY_FLOAT
+ SEMI_MAJOR_AXIS_TREND_DEG                          BINARY_FLOAT
+ SEMI_MINOR_AXIS_LENGTH_KM                          BINARY_FLOAT
+ DEPTH_UNCERTAINTY_KM                               BINARY_FLOAT
+ TIME_UNCERTAINTY                                   BINARY_FLOAT
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: LOCATION_UNCERTAINTY_ELLIPSOID
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ LOCATION_UNCERTAINTY_UUID                          RAW(16)
+ SCALING_FACTOR_TYPE                                VARCHAR2(32)
+ K_WEIGHT                                           BINARY_FLOAT
+ CONFIDENCE_LEVEL                                   BINARY_FLOAT
+ APRIORI_VARIANCE                                   BINARY_FLOAT
+ SEMI_MAJOR_AXIS_LENGTH_KM                          BINARY_FLOAT
+ SEMI_MAJOR_AXIS_TREND_DEG                          BINARY_FLOAT
+ SEMI_MAJOR_AXIS_PLUNGE_DEG                         BINARY_FLOAT
+ SEMI_INTERMEDIATE_AXIS_LENGTH_KM                   BINARY_FLOAT
+ SEMI_INTERMEDIATE_AXIS_TREND_DEG                   BINARY_FLOAT
+ SEMI_INTERMEDIATE_AXIS_PLUNGE_DEG                  BINARY_FLOAT
+ SEMI_MINOR_AXIS_LENGTH_KM                          BINARY_FLOAT
+ SEMI_MINOR_AXIS_TREND_KM                           BINARY_FLOAT
+ SEMI_MINOR_AXIS_PLUNGE_KM                          BINARY_FLOAT
+ TIME_UNCERTAINTY                                   BINARY_FLOAT
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: NETWORK_MAGNITUDE_SOLUTION
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ LOCATION_SOLUTION_UUID                             RAW(16)
+ EVENT_HYPOTHESIS_UUID                              RAW(16)
+ REMARK_GID                                         RAW(16)
+ MAGTYPE                                            VARCHAR2(6)
+ MAGNITUDE                                          BINARY_FLOAT
+ UNCERTAINTY                                        BINARY_FLOAT
+ STATUS                                             VARCHAR2(32)
+ AUTHOR                                             VARCHAR2(32)
+ STAGE                                              VARCHAR2(32)
+ ISCURRENT                                          VARCHAR2(1)
+ MODDATE                                            TIMESTAMP(6)
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: PROCESSING_MASK
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ PROCESSING_OPERATION                               VARCHAR2(32)
+ RAW_CHAN_CANONICAL_NAME                            VARCHAR2(32)
+ RAW_CHAN_EFFECTIVE_AT                              TIMESTAMP(6)
+ START_TIME                                         TIMESTAMP(6)
+ END_TIME                                           TIMESTAMP(6)
+ EFFECTIVE_AT                                       TIMESTAMP(6)
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: PROCESSING_MASK_QC_SEGMENT_VERSION
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ PROCESSING_MASK_UUID                      NOT NULL RAW(16)
+ QC_SEGMENT_VERSION_UUID                   NOT NULL RAW(16)
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: QC_SEGMENT_VERSION
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ QC_SEGMENT_GID                                     RAW(16)
+ CHAN_CANONICAL_NAME                                VARCHAR2(32)
+ CHAN_EFFECTIVE_AT                                  TIMESTAMP(6)
+ START_TIME                                         TIMESTAMP(6)
+ END_TIME                                           TIMESTAMP(6)
+ CATEGORY                                           VARCHAR2(32)
+ TYPE                                               VARCHAR2(32)
+ RATIONALE                                          VARCHAR2(32)
+ REJECTED                                           VARCHAR2(1)
+ AUTHOR                                             VARCHAR2(32)
+ STAGE                                              VARCHAR2(32)
+ ISCURRENT                                          VARCHAR2(1)
+ EFFECTIVE_AT                                       TIMESTAMP(6)
+ MODDATE                                            TIMESTAMP(6)
+ LDDATE                                             TIMESTAMP(6)
+ QCMASKID                                           NUMBER(18)
+
+TABLE: REMARK
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ REMARK_GID                                NOT NULL RAW(16)
+ REMARK                                             VARCHAR2(256)
+ AUTHOR                                             VARCHAR2(32)
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: SIGNAL_DETECTION_HYPOTHESIS
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ PARENT_SIG_DET_HYPO_UUID                           RAW(16)
+ SIG_DET_HYPO_GID                                   RAW(16)
+ REMARK_GID                                         RAW(16)
+ STA_NAME                                           VARCHAR2(6)
+ STA_EFFECTIVE_AT                                   TIMESTAMP(6)
+ MONITORING_ORGANIZATION                            VARCHAR2(32)
+ DELETED                                            VARCHAR2(1)
+ AUTHOR                                             VARCHAR2(32)
+ STAGE                                              VARCHAR2(32)
+ ISCURRENT                                          VARCHAR2(1)
+ MODDATE                                            TIMESTAMP(6)
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: STAGE_METRICS
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ INTERVAL_UUID                                      RAW(16)
+ INTERVAL_GID                                       RAW(16)
+ METRIC_NAME                                        VARCHAR2(32)
+ METRIC_VALUE                                       VARCHAR2(32)
+ STAGE                                              VARCHAR2(32)
+ ISCURRENT                                          VARCHAR2(1)
+ MODDATE                                            TIMESTAMP(6)
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: STATION_MAGNITUDE_SOLUTION
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ UUID                                      NOT NULL RAW(16)
+ FEATURE_MEASUREMENT_AMPLITUDE_UUID                 RAW(16)
+ NETWORK_MAGNITUDE_SOLUTION_UUID                    RAW(16)
+ REMARK_GID                                         RAW(16)
+ STA_NAME                                           VARCHAR2(6)
+ STA_EFFECTIVE_AT                                   TIMESTAMP(6)
+ PHASE                                              VARCHAR2(8)
+ DELTA                                              BINARY_FLOAT
+ MAGTYPE                                            VARCHAR2(6)
+ MAGNITUDE                                          BINARY_FLOAT
+ UNCERTAINTY                                        BINARY_FLOAT
+ RESIDUAL                                           BINARY_FLOAT
+ WEIGHT                                             BINARY_FLOAT
+ DEFINING                                           VARCHAR2(1)
+ REQUESTED_DEFINING                                 VARCHAR2(32)
+ ATTENUATION_MODEL                                  VARCHAR2(32)
+ MODEL_CORRECTION                                   BINARY_FLOAT
+ STATION_CORRECTION                                 BINARY_FLOAT
+ AUTHOR                                             VARCHAR2(32)
+ STAGE                                              VARCHAR2(32)
+ ISCURRENT                                          VARCHAR2(1)
+ MODDATE                                            TIMESTAMP(6)
+ LDDATE                                             TIMESTAMP(6)
+
+TABLE: RESPONSE_TABLE
+ Column                                    Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ INID					   NOT NULL NUMBER(18)
+ RSPTYPE				   NOT NULL VARCHAR2(6)
+ RESPONSE_FILE					    CLOB
+
+TABLE: STATION_CHANNEL
+ Column	                                   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ID					   NOT NULL RAW(16)
+ STA_NAME					    VARCHAR2(6)
+ STA_DESCRIPTION				    VARCHAR2(50)
+ STA_TYPE					    VARCHAR2(19)
+ STA_LAT					    BINARY_FLOAT
+ STA_LON					    BINARY_FLOAT
+ STA_ELEV					    BINARY_FLOAT
+ CHAN_GRP_NAME					    VARCHAR2(6)
+ CHAN_GRP_DESCRIPTION				    VARCHAR2(50)
+ CHAN_GRP_TYPE					    VARCHAR2(50)
+ CHAN_GRP_LAT					    BINARY_FLOAT
+ CHAN_GRP_LON					    BINARY_FLOAT
+ CHAN_GRP_ELEV					    BINARY_FLOAT
+ CHAN_GRP_NORTH_DISPLACEMENT			    BINARY_FLOAT
+ CHAN_GRP_EAST_DISPLACEMENT			    BINARY_FLOAT
+ CHAN_NAME					    VARCHAR2(8)
+ CHAN_CANONICAL_NAME				    VARCHAR2(32)
+ CHAN_DESCRIPTION				    VARCHAR2(50)
+ CHAN_DATA_TYPE 				    VARCHAR2(13)
+ CHAN_LAT					    BINARY_FLOAT
+ CHAN_LON					    BINARY_FLOAT
+ CHAN_ELEV					    BINARY_FLOAT
+ CHAN_EDEPTH					    BINARY_FLOAT
+ CHAN_HANG					    BINARY_FLOAT
+ CHAN_VANG					    BINARY_FLOAT
+ CHAN_BAND_TYPE 				    VARCHAR2(39)
+ CHAN_INSTRUMENT_TYPE				    VARCHAR2(21)
+ CHAN_ORIENTATION_CODE				    VARCHAR2(1)
+ CHAN_ORIENTATION_TYPE				    VARCHAR2(12)
+ CHAN_SAMPRATE					    BINARY_FLOAT
+ CHAN_UNITS					    VARCHAR2(22)
+ CHANID 					    NUMBER(18)
+ RESPONSE_CAL_FACTOR				    BINARY_FLOAT
+ RESPONSE_CAL_PERIOD				    BINARY_FLOAT
+ RESPONSE_CAL_TIMESHIFT 			    BINARY_FLOAT
+ INID						    NUMBER(18)
+ STA_EFFECTIVE_AT				    TIMESTAMP(6)
+ STA_EFFECTIVE_UNTIL				    TIMESTAMP(6)
+ STA_UPDATED_AT 				    TIMESTAMP(6)
+ CHAN_GRP_EFFECTIVE_AT				    TIMESTAMP(6)
+ CHAN_GRP_EFFECTIVE_UNTIL			    TIMESTAMP(6)
+ CHAN_GRP_UPDATED_AT				    TIMESTAMP(6)
+ CHAN_EFFECTIVE_AT				    TIMESTAMP(6)
+ CHAN_EFFECTIVE_UNTIL				    TIMESTAMP(6)
+ CHAN_UPDATED_AT				    TIMESTAMP(6)
+ RESPONSE_EFFECTIVE_AT				    TIMESTAMP(6)
+ RESPONSE_EFFECTIVE_UNTIL			    TIMESTAMP(6)
+ RESPONSE_UPDATED_AT				    TIMESTAMP(6)
+ ISCURRENT				   NOT NULL VARCHAR2(1)
+ MODDATE					    TIMESTAMP(6)
+ LDDATE 					    TIMESTAMP(6)
+
+TABLE: STATION_GROUP_VERSION
+ Column	                                   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ STA_GRP_NAME				   NOT NULL VARCHAR2(8)
+ STA_GRP_DESCRIPTION				    VARCHAR2(120)
+ STA_GRP_EFFECTIVE_AT			   NOT NULL TIMESTAMP(6)
+ STA_GRP_EFFECTIVE_UNTIL			    TIMESTAMP(6)
+ STA_GRP_UPDATED_AT				    TIMESTAMP(6)
+ LDDATE 					    TIMESTAMP(6)
