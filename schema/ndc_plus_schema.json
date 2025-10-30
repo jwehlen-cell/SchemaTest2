@@ -1,0 +1,2746 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "NDC PLUS Database Schema",
+  "description": "National Data Center PLUS system database schema for seismic event monitoring and analysis",
+  "version": "1.0.0",
+  "database_type": "Oracle",
+  "tables": {
+    "CHANNEL_SEGMENT": {
+      "description": "Stores time series channel segment information for waveform data",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHANNEL_SEGMENT_CREATION_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "REFERENCE_ID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CREATION_TIME": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_CANONICAL_NAME": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_EFFECTIVE_AT": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "TIME_SERIES_TYPE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "START_TIME": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "END_TIME": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "CHANNEL_SEGMENT_CREATION": {
+      "description": "Tracks creation metadata for channel segments",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "OBJECT": {
+          "type": "string",
+          "oracle_type": "CLOB",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "CHANNEL_SEGMENT_PROC_MASK_XREF": {
+      "description": "Cross-reference between channel segments and processing masks",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHANNEL_SEGMENT_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "PROCESSING_MASK_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "ISCURRENT": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(1)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MODDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "CHANNEL_SEGMENT_WAVEFORM": {
+      "description": "Links channel segments to waveform IDs",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHANNEL_SEGMENT_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "WFID": {
+          "type": "number",
+          "oracle_type": "NUMBER(18)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "ISCURRENT": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(1)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MODDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "EVENT": {
+      "description": "Seismic event master table",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "REMARK_GID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MONITORING_ORGANIZATION": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "EVENT_CORRELATION": {
+      "description": "Correlation analysis between seismic events",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SOURCE_EVENT_HYPOTHESIS_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SIMILAR_EVENT_HYPOTHESIS_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SOURCE_EVENT_CHANNEL_SEGMENT_GID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SIMILAR_EVENT_CHANNEL_SEGMENT_GID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STA_NAME": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STA_EFFECTIVE_AT": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_LIST": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(2000)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "FILTERID": {
+          "type": "number",
+          "oracle_type": "NUMBER(18)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SCAN_TYPE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SCAN_STAGES": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CORRELATION_COEFFICIENT": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "AUTHOR": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STAGE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "ISCURRENT": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(1)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MODDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "EVENT_CORRELATION_CHANNEL_SEGMENT": {
+      "description": "Channel segments used in event correlation",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHANNEL_SEGMENT_GID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_CANONICAL_NAME": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_EFFECTIVE_AT": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "TIME_SERIES_TYPE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "START_TIME": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "END_TIME": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "EVENT_HYPOTHESIS": {
+      "description": "Hypotheses about seismic event characteristics",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "EVENT_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "PREFERRED_LOCATION_SOLUTION_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "REMARK_GID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "DELETED": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(1)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "REJECTED": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(1)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "PREFERRED_BY": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "AUTHOR": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STAGE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "ISCURRENT": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(1)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MODDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "EVENT_HYPOTHESIS_TAG": {
+      "description": "Tags and classifications for event hypotheses",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "EVENT_HYPOTHESIS_UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "TAG": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "AUTHOR": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STAGE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "ISCURRENT": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(1)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MODDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "EVENT_STATUS_INFO": {
+      "description": "Status and workflow information for events",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "EVENT_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "EVENT_STATUS": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "ACTIVE_ANALYST_IDS": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(256)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STAGE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "ISCURRENT": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(1)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MODDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "FEATURE_MEASUREMENT_AMPLITUDE": {
+      "description": "Amplitude measurements from seismic signals",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SIG_DET_HYPO_GID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MEASURED_CHANNEL_SEGMENT_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "ANALYSIS_CHANNEL_SEGMENT_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "FILTERID": {
+          "type": "number",
+          "oracle_type": "NUMBER(18)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "FILTER_USAGE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_CANONICAL_NAME": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_EFFECTIVE_AT": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MEASUREMENT_TYPE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(20)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "AMPLITUDE": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "PERIOD": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "UNITS": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CLIPPED": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(1)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MEASUREMENT_WINDOW_START_TIME": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MEASUREMENT_WINDOW_DURATION": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MEASUREMENT_TIME": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SNR": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "FEATURE_MEASUREMENT_ARRIVAL_TIME": {
+      "description": "Arrival time measurements for seismic phases",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SIG_DET_HYPO_GID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MEASURED_CHANNEL_SEGMENT_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "ANALYSIS_CHANNEL_SEGMENT_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "FILTERID": {
+          "type": "number",
+          "oracle_type": "NUMBER(18)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "FILTER_USAGE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_CANONICAL_NAME": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_EFFECTIVE_AT": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MEASUREMENT_TYPE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(27)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "ARRIVAL_TIME": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STANDARD_DEVIATION": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SNR": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "FEATURE_MEASUREMENT_ENUMERATED": {
+      "description": "Categorical feature measurements",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SIG_DET_HYPO_GID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MEASURED_CHANNEL_SEGMENT_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "ANALYSIS_CHANNEL_SEGMENT_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "FILTERID": {
+          "type": "number",
+          "oracle_type": "NUMBER(18)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "FILTER_USAGE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_CANONICAL_NAME": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_EFFECTIVE_AT": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MEASUREMENT_TYPE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(20)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MEASURED_VALUE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(13)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CONFIDENCE": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "REFERENCE_TIME": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SNR": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "FEATURE_MEASUREMENT_NUMERIC": {
+      "description": "Numeric feature measurements",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SIG_DET_HYPO_GID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MEASURED_CHANNEL_SEGMENT_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "ANALYSIS_CHANNEL_SEGMENT_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "FILTERID": {
+          "type": "number",
+          "oracle_type": "NUMBER(18)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "FILTER_USAGE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_CANONICAL_NAME": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_EFFECTIVE_AT": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MEASUREMENT_TYPE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(27)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MEASURED_VALUE": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "UNITS": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STANDARD_DEVIATION": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "REFERENCE_TIME": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SNR": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "FEATURE_PREDICTION_ARRIVAL_TIME": {
+      "description": "Predicted arrival times for seismic phases",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LOCATION_BEHAVIOR_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_CANONICAL_NAME": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_EFFECTIVE_AT": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "PHASE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(8)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "PREDICTION_TYPE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(27)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "ARRIVAL_TIME": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "TRAVEL_TIME": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STANDARD_DEVIATION": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "EXTRAPOLATED": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(1)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "FEATURE_PREDICTION_COMPONENT": {
+      "description": "Component-specific feature predictions",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "FEATURE_PREDICTION_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "PREDICTION_COMPONENT_TYPE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(35)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "VALUE": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "EXTRAPOLATED": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(1)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "FEATURE_PREDICTION_NUMERIC": {
+      "description": "Numeric feature predictions",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LOCATION_BEHAVIOR_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_CANONICAL_NAME": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_EFFECTIVE_AT": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "PHASE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(8)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "PREDICTION_TYPE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(27)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "PREDICTED_VALUE": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "UNITS": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STANDARD_DEVIATION": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "EXTRAPOLATED": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(1)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "INTERVAL": {
+      "description": "Time intervals for processing and analysis",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "INTERVAL_GID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "REMARK_GID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STATUS": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "START_TIME": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "END_TIME": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "PROCESSING_START_TIME": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "PROCESSING_END_TIME": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "PERCENT_COMPLETED": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "ACTIVE_ANALYST_IDS": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(256)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "RESERVED_ANALYST_ID": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "COMPLETED_ANALYST_ID": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "AUTHOR": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STAGE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STAGE_MODE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SUB_STAGE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(64)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LAST_EXECUTED_STEP_NAME": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "ISCURRENT": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(1)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MODDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "LOCATION_BEHAVIOR": {
+      "description": "Location calculation behavior and parameters",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LOCATION_SOLUTION_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SIG_DET_HYPO_GID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "FEATURE_MEASUREMENT_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "FEATURE_PREDICTION_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "VALUE_TYPE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(12)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "DEFINING": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(1)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "REQUESTED_DEFINING": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(1)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "RESIDUAL": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "WEIGHT": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "LOCATION_RESTRAINT": {
+      "description": "Constraints and restraints for location calculations",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LOCATION_SOLUTION_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "DEPTH_RESTRAINT_TYPE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(12)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "DEPTH_RESTRAINT_KM": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "DEPTH_RESTRAINT_REASON": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(51)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "EPICENTER_RESTRAINT_TYPE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(12)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LATITUDE_RESTRAINT_DEG": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LONGITUDE_RESTRAINT_DEG": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "TIME_RESTRAINT_TYPE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(12)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "TIME_RESTRAINT": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "RESTRAINER": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(22)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "LOCATION_SOLUTION": {
+      "description": "Calculated geographic locations for events",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "EVENT_HYPOTHESIS_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "REMARK_GID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LAT": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LON": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "DEPTH": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "TIME": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "GRN": {
+          "type": "number",
+          "oracle_type": "NUMBER(8)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SRN": {
+          "type": "number",
+          "oracle_type": "NUMBER(8)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "ALGORITHM": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(15)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "AUTHOR": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STAGE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "ISCURRENT": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(1)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MODDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "LOCATION_UNCERTAINTY": {
+      "description": "Uncertainty estimates for event locations",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LOCATION_SOLUTION_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "REMARK_GID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "XX": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "YY": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "ZZ": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "TT": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "XY": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "XZ": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "YZ": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "TX": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "TY": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "TZ": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STD_DEV_TRAVEL_TIME_RESIDUALS": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STAGE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "ISCURRENT": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(1)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MODDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "LOCATION_UNCERTAINTY_ELLIPSE": {
+      "description": "Elliptical uncertainty representation",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LOCATION_UNCERTAINTY_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SCALING_FACTOR_TYPE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "K_WEIGHT": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CONFIDENCE_LEVEL": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "APRIORI_VARIANCE": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SEMI_MAJOR_AXIS_LENGTH_KM": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SEMI_MAJOR_AXIS_TREND_DEG": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SEMI_MINOR_AXIS_LENGTH_KM": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "DEPTH_UNCERTAINTY_KM": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "TIME_UNCERTAINTY": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "LOCATION_UNCERTAINTY_ELLIPSOID": {
+      "description": "Ellipsoidal 3D uncertainty representation",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LOCATION_UNCERTAINTY_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SCALING_FACTOR_TYPE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "K_WEIGHT": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CONFIDENCE_LEVEL": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "APRIORI_VARIANCE": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SEMI_MAJOR_AXIS_LENGTH_KM": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SEMI_MAJOR_AXIS_TREND_DEG": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SEMI_MAJOR_AXIS_PLUNGE_DEG": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SEMI_INTERMEDIATE_AXIS_LENGTH_KM": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SEMI_INTERMEDIATE_AXIS_TREND_DEG": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SEMI_INTERMEDIATE_AXIS_PLUNGE_DEG": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SEMI_MINOR_AXIS_LENGTH_KM": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SEMI_MINOR_AXIS_TREND_KM": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SEMI_MINOR_AXIS_PLUNGE_KM": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "TIME_UNCERTAINTY": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "NETWORK_MAGNITUDE_SOLUTION": {
+      "description": "Network-level magnitude calculations",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LOCATION_SOLUTION_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "EVENT_HYPOTHESIS_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "REMARK_GID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MAGTYPE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MAGNITUDE": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "UNCERTAINTY": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STATUS": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "AUTHOR": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STAGE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "ISCURRENT": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(1)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MODDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "PROCESSING_MASK": {
+      "description": "Data quality masks and processing intervals",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "PROCESSING_OPERATION": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "RAW_CHAN_CANONICAL_NAME": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "RAW_CHAN_EFFECTIVE_AT": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "START_TIME": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "END_TIME": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "EFFECTIVE_AT": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "PROCESSING_MASK_QC_SEGMENT_VERSION": {
+      "description": "Links processing masks to QC segments",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "PROCESSING_MASK_UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "QC_SEGMENT_VERSION_UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "QC_SEGMENT_VERSION": {
+      "description": "Quality control segment versions",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "QC_SEGMENT_GID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_CANONICAL_NAME": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_EFFECTIVE_AT": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "START_TIME": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "END_TIME": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CATEGORY": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "TYPE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "RATIONALE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "REJECTED": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(1)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "AUTHOR": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STAGE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "ISCURRENT": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(1)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "EFFECTIVE_AT": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MODDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "QCMASKID": {
+          "type": "number",
+          "oracle_type": "NUMBER(18)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "REMARK": {
+      "description": "Comments and annotations",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "REMARK_GID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "REMARK": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(256)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "AUTHOR": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "SIGNAL_DETECTION_HYPOTHESIS": {
+      "description": "Signal detection hypotheses and picks",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "PARENT_SIG_DET_HYPO_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "SIG_DET_HYPO_GID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "REMARK_GID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STA_NAME": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STA_EFFECTIVE_AT": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MONITORING_ORGANIZATION": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "DELETED": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(1)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "AUTHOR": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STAGE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "ISCURRENT": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(1)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MODDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "STAGE_METRICS": {
+      "description": "Performance metrics for processing stages",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "INTERVAL_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "INTERVAL_GID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "METRIC_NAME": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "METRIC_VALUE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STAGE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "ISCURRENT": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(1)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MODDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "STATION_MAGNITUDE_SOLUTION": {
+      "description": "Station-level magnitude calculations",
+      "columns": {
+        "UUID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "FEATURE_MEASUREMENT_AMPLITUDE_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "NETWORK_MAGNITUDE_SOLUTION_UUID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "REMARK_GID": {
+          "type": "binary",
+          "oracle_type": "RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STA_NAME": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STA_EFFECTIVE_AT": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "PHASE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(8)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "DELTA": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MAGTYPE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MAGNITUDE": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "UNCERTAINTY": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "RESIDUAL": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "WEIGHT": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "DEFINING": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(1)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "REQUESTED_DEFINING": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "ATTENUATION_MODEL": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MODEL_CORRECTION": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STATION_CORRECTION": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "AUTHOR": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STAGE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "ISCURRENT": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(1)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MODDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "RESPONSE_TABLE": {
+      "description": "Instrument response specifications",
+      "columns": {
+        "INID": {
+          "type": "number",
+          "oracle_type": "NOT NULL NUMBER(18)",
+          "nullable": true,
+          "primary_key": true
+        },
+        "RSPTYPE": {
+          "type": "string",
+          "oracle_type": "NOT NULL VARCHAR2(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "RESPONSE_FILE": {
+          "type": "string",
+          "oracle_type": "CLOB",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "STATION_CHANNEL": {
+      "description": "Station and channel configuration metadata",
+      "columns": {
+        "ID": {
+          "type": "binary",
+          "oracle_type": "NOT NULL RAW(16)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STA_NAME": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STA_DESCRIPTION": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(50)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STA_TYPE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(19)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STA_LAT": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STA_LON": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STA_ELEV": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_GRP_NAME": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_GRP_DESCRIPTION": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(50)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_GRP_TYPE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(50)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_GRP_LAT": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_GRP_LON": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_GRP_ELEV": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_GRP_NORTH_DISPLACEMENT": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_GRP_EAST_DISPLACEMENT": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_NAME": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(8)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_CANONICAL_NAME": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(32)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_DESCRIPTION": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(50)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_DATA_TYPE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(13)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_LAT": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_LON": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_ELEV": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_EDEPTH": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_HANG": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_VANG": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_BAND_TYPE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(39)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_INSTRUMENT_TYPE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(21)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_ORIENTATION_CODE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(1)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_ORIENTATION_TYPE": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(12)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_SAMPRATE": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_UNITS": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(22)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHANID": {
+          "type": "number",
+          "oracle_type": "NUMBER(18)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "RESPONSE_CAL_FACTOR": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "RESPONSE_CAL_PERIOD": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "RESPONSE_CAL_TIMESHIFT": {
+          "type": "number",
+          "oracle_type": "BINARY_FLOAT",
+          "nullable": true,
+          "primary_key": false
+        },
+        "INID": {
+          "type": "number",
+          "oracle_type": "NUMBER(18)",
+          "nullable": true,
+          "primary_key": true
+        },
+        "STA_EFFECTIVE_AT": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STA_EFFECTIVE_UNTIL": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STA_UPDATED_AT": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_GRP_EFFECTIVE_AT": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_GRP_EFFECTIVE_UNTIL": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_GRP_UPDATED_AT": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_EFFECTIVE_AT": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_EFFECTIVE_UNTIL": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "CHAN_UPDATED_AT": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "RESPONSE_EFFECTIVE_AT": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "RESPONSE_EFFECTIVE_UNTIL": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "RESPONSE_UPDATED_AT": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "ISCURRENT": {
+          "type": "string",
+          "oracle_type": "NOT NULL VARCHAR2(1)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "MODDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    },
+    "STATION_GROUP_VERSION": {
+      "description": "Station group definitions and versions",
+      "columns": {
+        "STA_GRP_NAME": {
+          "type": "string",
+          "oracle_type": "NOT NULL VARCHAR2(8)",
+          "nullable": true,
+          "primary_key": true
+        },
+        "STA_GRP_DESCRIPTION": {
+          "type": "string",
+          "oracle_type": "VARCHAR2(120)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STA_GRP_EFFECTIVE_AT": {
+          "type": "timestamp",
+          "oracle_type": "NOT NULL TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STA_GRP_EFFECTIVE_UNTIL": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "STA_GRP_UPDATED_AT": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        },
+        "LDDATE": {
+          "type": "timestamp",
+          "oracle_type": "TIMESTAMP(6)",
+          "nullable": true,
+          "primary_key": false
+        }
+      }
+    }
+  }
+}
