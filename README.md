@@ -41,6 +41,16 @@ The documentation includes:
 - ✅ Foreign key relationships and references
 - ✅ Oracle-specific data types
 
+### 🎨 Interactive HTML Viewer
+
+**[🌐 Open Schema Viewer](schema/docs/schema-viewer.html)** (requires local server)
+
+A Swagger-like interface for browsing the schema:
+
+![Schema Viewer Overview](https://github.com/user-attachments/assets/ba4e7c0b-1342-4544-8367-b670d9ab78ff)
+
+![Table Detail View](https://github.com/user-attachments/assets/4bec93f9-5c13-4a67-8390-1d8007f38fb4)
+
 ### 📊 Schema Statistics
 
 - **Total Tables**: 35
