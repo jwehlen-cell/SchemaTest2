@@ -342,6 +342,93 @@
             color: #7f8c8d;
         }
         
+        .view-tabs {
+            display: flex;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .view-tab {
+            flex: 1;
+            padding: 12px 20px;
+            text-align: center;
+            background: none;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        .view-tab.active {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .view-tab:hover:not(.active) {
+            background-color: #e9ecef;
+        }
+        
+        .view-content {
+            display: none;
+        }
+        
+        .view-content.active {
+            display: block;
+        }
+        
+        .diagram-section {
+            background-color: white;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .diagram-header {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 20px;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .diagram-content {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .diagram-image {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .diagram-image:hover {
+            transform: scale(1.02);
+        }
+        
+        .download-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .download-link:hover {
+            background-color: #2980b9;
+        }
+        
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
@@ -388,6 +475,12 @@
             <div class="header">
                 <h1>Database Schema Browser</h1>
                 <p>Interactive explorer for seismic monitoring database schemas</p>
+                
+                <div class="view-tabs">
+                    <button class="view-tab active" onclick="showView('tables')">📊 Table Browser</button>
+                    <button class="view-tab" onclick="showView('diagrams')">📈 Entity Diagrams</button>
+                </div>
+                
                 <div class="stats">
                     <div class="stat">
                         <span class="stat-number">52</span>
@@ -404,15 +497,43 @@
                 </div>
             </div>
             
-            <div id="welcomeSection" class="welcome">
-                <h2>Welcome to the Schema Browser</h2>
-                <p>Select a table from the sidebar to explore its structure and relationships.</p>
-                <p>Use the tabs above to switch between Legacy and NDC PLUS schemas.</p>
-                <p>This tool provides comprehensive documentation for both database schemas used in seismic event monitoring.</p>
+            <div id="tables-view" class="view-content active">
+                <div id="welcomeSection" class="welcome">
+                    <h2>Welcome to the Schema Browser</h2>
+                    <p>Select a table from the sidebar to explore its structure and relationships.</p>
+                    <p>Use the tabs above to switch between Legacy and NDC PLUS schemas.</p>
+                    <p>This tool provides comprehensive documentation for both database schemas used in seismic event monitoring.</p>
+                </div>
+                
+                <div id="tableDetails">
+                    <!-- Table details will be shown here -->
+                </div>
             </div>
             
-            <div id="tableDetails">
-                <!-- Table details will be shown here -->
+            <div id="diagrams-view" class="view-content">
+                <div class="diagram-section">
+                    <div class="diagram-header">
+                        <h2>🗂️ Legacy Schema - Entity Relationship Diagram</h2>
+                        <p>Visual representation of the Legacy database schema (17 tables)</p>
+                    </div>
+                    <div class="diagram-content">
+                        <img src="images/legacy_schema.png" alt="Legacy Schema ER Diagram" class="diagram-image" onclick="openImageInNewTab('images/legacy_schema.png')">
+                        <br>
+                        <a href="images/legacy_schema.png" download="legacy_schema.png" class="download-link">📥 Download Legacy Diagram</a>
+                    </div>
+                </div>
+                
+                <div class="diagram-section">
+                    <div class="diagram-header">
+                        <h2>🗄️ NDC PLUS Schema - Entity Relationship Diagram</h2>
+                        <p>Visual representation of the NDC PLUS database schema (35 tables)</p>
+                    </div>
+                    <div class="diagram-content">
+                        <img src="images/ndc_plus_schema.png" alt="NDC PLUS Schema ER Diagram" class="diagram-image" onclick="openImageInNewTab('images/ndc_plus_schema.png')">
+                        <br>
+                        <a href="images/ndc_plus_schema.png" download="ndc_plus_schema.png" class="download-link">📥 Download NDC PLUS Diagram</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -422,6 +543,29 @@
         let schemaData = null;
         let currentSchema = 'legacy';
         let currentTable = null;
+
+        // View management functions
+        function showView(viewName) {
+            // Hide all views
+            document.querySelectorAll('.view-content').forEach(view => {
+                view.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.view-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected view
+            document.getElementById(viewName + '-view').classList.add('active');
+            
+            // Activate clicked tab
+            event.target.classList.add('active');
+        }
+        
+        function openImageInNewTab(imageSrc) {
+            window.open(imageSrc, '_blank');
+        }
 
         // Load schema data
         async function loadSchemaData() {

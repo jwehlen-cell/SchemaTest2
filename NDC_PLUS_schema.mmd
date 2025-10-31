@@ -1,0 +1,342 @@
+erDiagram
+  CHANNEL_OBJECT {
+    string UUID PK
+    string NAME
+    date EFFECTIVE_AT
+    string OBJECT
+    date LDDATE
+  }
+  CHANNEL_SEGMENT {
+    string UUID PK
+    string CHANNEL_SEGMENT_CREATION_UUID
+    string REFERENCE_ID
+    date CREATION_TIME
+    string CHAN_CANONICAL_NAME
+    date CHAN_EFFECTIVE_AT
+    string TIME_SERIES_TYPE
+    date START_TIME
+    date END_TIME
+    date LDDATE
+    int TAGID
+  }
+  CHANNEL_SEGMENT_CREATION {
+    string UUID PK
+    string OBJECT
+    date LDDATE
+  }
+  CHANNEL_SEGMENT_PROC_MASK_XREF {
+    string UUID PK
+    string CHANNEL_SEGMENT_UUID
+    string PROCESSING_MASK_UUID
+    string ISCURRENT
+    date MODDATE
+    date LDDATE
+  }
+  CHANNEL_SEGMENT_WAVEFORM {
+    string UUID PK
+    string CHANNEL_SEGMENT_UUID
+    int SEGMENT
+    int SAMPLES
+    int SAMP_RATE_HZ
+    date START_TIME
+    date END_TIME
+    int STORAGE_OFFSET
+    int STORAGE_LENGTH
+    int SEQUENCE_NUMBER
+    int QC_SEGMENT_VERSION
+    date LDDATE
+  }
+  EVENT {
+    string UUID PK
+    string REMARK_GID
+    string MONITORING_ORGANIZATION
+    date LDDATE
+    int EVID
+  }
+  EVENT_CORRELATION {
+    string UUID PK
+    string SOURCE_EVENT_HYPOTHESIS_UUID
+    string SIMILAR_EVENT_HYPOTHESIS_UUID
+    string SOURCE_EVENT_CHANNEL_SEGMENT_GID
+    string SIMILAR_EVENT_CHANNEL_SEGMENT_GID
+    string STA_NAME
+    date STA_EFFECTIVE_AT
+    string CHAN_LIST
+    int FILTERID
+    string SCAN_TYPE
+    string SCAN_STAGES
+    int CORRELATION_COEFFICIENT
+    string AUTHOR
+    string STAGE
+    date MODDATE
+    date LDDATE
+    int SOURCE_EVID
+    int SOURCE_ORID
+    int SIMILAR_EVID
+    int SIMILAR_ORID
+    date CORR_TIME
+    int NUM_CHAN
+  }
+  EVENT_CORRELATION_CHANNEL_SEGMENT {
+    string UUID PK
+    string EVENT_CORRELATION_UUID
+    string CHANNEL_SEGMENT_UUID
+    string CORRELATION_TYPE
+    int ORDER_INDEX
+    date LDDATE
+  }
+  EVENT_HYPOTHESIS {
+    string UUID PK
+    string EVENT_UUID
+    string PREFERRED_LOCATION_SOLUTION_UUID
+    string REMARK_GID
+    string DELETED
+    string REJECTED
+    string PREFERRED_BY
+    string AUTHOR
+    string STAGE
+    string ISCURRENT
+    date MODDATE
+    date LDDATE
+    int EVID
+    int PREFOR
+    string EVNAME
+  }
+  EVENT_HYPOTHESIS_TAG {
+    string UUID PK
+    string EVENT_HYPOTHESIS_UUID
+    string TAG_UUID
+    date LDDATE
+    int ORID
+  }
+  FEATURE_MEASUREMENT_ARRIVAL_TIME {
+    string UUID PK
+    string SIG_DET_HYPO_GID
+    string MEASURED_CHANNEL_SEGMENT_UUID
+    string ANALYSIS_CHANNEL_SEGMENT_UUID
+    int FILTERID
+    string FILTER_USAGE
+    string CHAN_CANONICAL_NAME
+    date CHAN_EFFECTIVE_AT
+    string MEASUREMENT_TYPE
+    date ARRIVAL_TIME
+    int STANDARD_DEVIATION
+    int SNR
+    date LDDATE
+    int ARID
+  }
+  FEATURE_MEASUREMENT_AMPLITUDE {
+    string UUID PK
+    string SIG_DET_HYPO_GID
+    string MEASURED_CHANNEL_SEGMENT_UUID
+    string ANALYSIS_CHANNEL_SEGMENT_UUID
+    int FILTERID
+    string FILTER_USAGE
+    string CHAN_CANONICAL_NAME
+    date CHAN_EFFECTIVE_AT
+    string MEASUREMENT_TYPE
+    int AMPLITUDE
+    string UNITS
+    int SNR
+    date LDDATE
+    int ARID
+    int AMPID
+  }
+  FEATURE_MEASUREMENT_ENUMERATED {
+    string UUID PK
+    string SIG_DET_HYPO_GID
+    string MEASURED_CHANNEL_SEGMENT_UUID
+    string ANALYSIS_CHANNEL_SEGMENT_UUID
+    int FILTERID
+    string FILTER_USAGE
+    string CHAN_CANONICAL_NAME
+    date CHAN_EFFECTIVE_AT
+    string MEASUREMENT_TYPE
+    string ENUMERATION
+    date LDDATE
+  }
+  FEATURE_MEASUREMENT_NUMERIC {
+    string UUID PK
+    string SIG_DET_HYPO_GID
+    string MEASURED_CHANNEL_SEGMENT_UUID
+    string ANALYSIS_CHANNEL_SEGMENT_UUID
+    int FILTERID
+    string FILTER_USAGE
+    string CHAN_CANONICAL_NAME
+    date CHAN_EFFECTIVE_AT
+    string MEASUREMENT_TYPE
+    int VALUE
+    int STANDARD_DEVIATION
+    date LDDATE
+  }
+  FEATURE_PREDICTION_ARRIVAL_TIME {
+    string UUID PK
+    string LOCATION_SOLUTION_UUID
+    string FEATURE_PREDICTION_COMPONENT_UUID
+    string CHAN_CANONICAL_NAME
+    date CHAN_EFFECTIVE_AT
+    string MEASUREMENT_TYPE
+    date ARRIVAL_TIME
+    int STANDARD_DEVIATION
+    date LDDATE
+    int ARID
+  }
+  FEATURE_PREDICTION_COMPONENT {
+    string UUID PK
+    string PHASE
+    string CHANNEL_OBJECT_UUID
+    string METHOD
+    string SCATTER
+    date LDDATE
+  }
+  FEATURE_PREDICTION_NUMERIC {
+    string UUID PK
+    string LOCATION_SOLUTION_UUID
+    string FEATURE_PREDICTION_COMPONENT_UUID
+    string CHAN_CANONICAL_NAME
+    date CHAN_EFFECTIVE_AT
+    string MEASUREMENT_TYPE
+    int VALUE
+    int STANDARD_DEVIATION
+    date LDDATE
+  }
+  LOCATION_BEHAVIOR {
+    string UUID PK
+    string LOCATION_SOLUTION_UUID
+    string SIG_DET_HYPO_GID
+    string FEATURE_MEASUREMENT_UUID
+    string FEATURE_PREDICTION_UUID
+    string VALUE_TYPE
+    string DEFINING
+    string REQUESTED_DEFINING
+  }
+  LOCATION_SOLUTION {
+    string UUID PK
+    string EVENT_HYPOTHESIS_UUID
+    string PREFERRED_LOCATION_BEHAVIOR_UUID
+    string LOCATION_UNCERTAINTY_UUID
+    int LAT
+    int LON
+    int DEPTH
+    date TIME
+    int GRN
+    int SRN
+    string ALGORITHM
+    string AUTHOR
+    string STAGE
+    string ISCURRENT
+    date MODDATE
+    date LDDATE
+    int ORID
+    int EVID
+    int MBID
+    int MSID
+    int MLID
+    string ETYPE
+    int DEPDP
+    string DTYPE
+  }
+  LOCATION_UNCERTAINTY {
+    string UUID PK
+    int SXX
+    int SYY
+    int SZZ
+    int STT
+    int SXY
+    int SXZ
+    int SYZ
+    int STX
+    int STY
+    int STZ
+    int SDOBS
+    int SDEPTH
+    int STIME
+    string CONF
+    date LDDATE
+    int ORID
+  }
+  PROCESSING_MASK {
+    string UUID PK
+    string PROCESSING_OPERATION
+    string RAW_CHAN_CANONICAL_NAME
+    date RAW_CHAN_EFFECTIVE_AT
+    date START_TIME
+    date END_TIME
+    date EFFECTIVE_AT
+    date LDDATE
+  }
+  PROCESSING_MASK_QC_SEGMENT_VERSION {
+    string UUID PK
+    string PROCESSING_MASK_UUID
+    int QC_SEGMENT_VERSION
+    date LDDATE
+  }
+  REMARK {
+    string UUID PK
+    string REMARK_GID
+    string REMARK
+    string AUTHOR
+    date LDDATE
+  }
+  SIGNAL_DETECTION_HYPOTHESIS {
+    string UUID PK
+    string PARENT_SIG_DET_HYPO_UUID
+    string SIG_DET_HYPO_GID
+    string REMARK_GID
+    string STA_NAME
+    date STA_EFFECTIVE_AT
+    string MONITORING_ORGANIZATION
+    string DELETED
+    string AUTHOR
+    string STAGE
+    string ISCURRENT
+    date MODDATE
+    date LDDATE
+    int ARID
+    string CHAN
+    int STASSID
+  }
+  SIG_DET_HYPO_FEATURE_MEASUREMENT_XREF {
+    string UUID PK
+    string SIG_DET_HYPO_UUID
+    string FEATURE_MEASUREMENT_UUID
+    string MEASUREMENT_TABLE
+    date LDDATE
+  }
+  STAGE_METRICS {
+    string UUID PK
+    string PARENT_GID
+    string ENTITY_UUID
+    string ENTITY_TABLE
+    string STATE
+    string STATE_REASON
+    string STATUS
+    date START_TIME
+    date END_TIME
+    date PROCESSING_START_TIME
+    date PROCESSING_END_TIME
+    int ARID
+    int ORID
+    int EVID
+    int AMPID
+    int MAGID
+    date LDDATE
+  }
+
+  EVENT_HYPOTHESIS }o--|| EVENT : "event_uuid->UUID"
+  LOCATION_SOLUTION }o--|| EVENT_HYPOTHESIS : "event_hypothesis_uuid->UUID"
+  LOCATION_BEHAVIOR }o--|| LOCATION_SOLUTION : "location_solution_uuid->UUID"
+  LOCATION_BEHAVIOR }o--|| SIGNAL_DETECTION_HYPOTHESIS : "sig_det_hypo_gid->UUID"
+  FEATURE_MEASUREMENT_ARRIVAL_TIME }o--|| SIGNAL_DETECTION_HYPOTHESIS : "sig_det_hypo_gid->UUID"
+  FEATURE_MEASUREMENT_ARRIVAL_TIME }o--|| CHANNEL_SEGMENT : "measured_channel_segment_uuid->UUID"
+  FEATURE_MEASUREMENT_AMPLITUDE }o--|| SIGNAL_DETECTION_HYPOTHESIS : "sig_det_hypo_gid->UUID"
+  FEATURE_MEASUREMENT_AMPLITUDE }o--|| CHANNEL_SEGMENT : "measured_channel_segment_uuid->UUID"
+  SIG_DET_HYPO_FEATURE_MEASUREMENT_XREF }o--|| SIGNAL_DETECTION_HYPOTHESIS : "sig_det_hypo_uuid->UUID"
+  CHANNEL_SEGMENT }o--|| CHANNEL_SEGMENT_CREATION : "channel_segment_creation_uuid->UUID"
+  CHANNEL_SEGMENT_WAVEFORM }o--|| CHANNEL_SEGMENT : "channel_segment_uuid->UUID"
+  CHANNEL_SEGMENT_PROC_MASK_XREF }o--|| CHANNEL_SEGMENT : "channel_segment_uuid->UUID"
+  CHANNEL_SEGMENT_PROC_MASK_XREF }o--|| PROCESSING_MASK : "processing_mask_uuid->UUID"
+  EVENT_CORRELATION }o--|| EVENT_HYPOTHESIS : "source_event_hypothesis_uuid->UUID"
+  EVENT_CORRELATION }o--|| EVENT_HYPOTHESIS : "similar_event_hypothesis_uuid->UUID"
+  EVENT_CORRELATION_CHANNEL_SEGMENT }o--|| EVENT_CORRELATION : "event_correlation_uuid->UUID"
+  EVENT_CORRELATION_CHANNEL_SEGMENT }o--|| CHANNEL_SEGMENT : "channel_segment_uuid->UUID"

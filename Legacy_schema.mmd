@@ -1,0 +1,280 @@
+erDiagram
+  ACTIVE_ID {
+    string TAGNAME
+    int TAGID
+    string CLIENT_INFO
+    string AUTHOR
+    date MODDATE
+    date LDDATE
+  }
+  AMPLITUDE {
+    int AMPID PK
+    int ARID
+    int PARID
+    string CHAN
+    int AMP
+    int PER
+    int SNR
+    int DELAMP
+    int SNRTYPE
+    int AMPSRC
+    string UNITS
+    string AUTH
+    date LDDATE
+  }
+  AMPLITUDE_DYN_PARS_INT {
+    int AMPID
+    string GROUP_NAME
+    string PARAM_NAME
+    int I_VALUE
+    date LDDATE
+  }
+  ARRIVAL {
+    string STA
+    int TIME
+    int ARID PK
+    int JDATE
+    int STASSID
+    int CHANID
+    string CHAN
+    string IPHASE
+    string STYPE
+    int DELTIM
+    int AZIMUTH
+    int DELAZ
+    int SLOW
+    int DELSLO
+    int EMA
+    int RECT
+    int AMP
+    int PER
+    int LOGAT
+    string CLIP
+    string FM
+    string QUAL
+    int AUTH
+    int COMMID
+    date LDDATE
+  }
+  ARRIVAL_DYN_PARS_INT {
+    int ARID
+    string GROUP_NAME
+    string PARAM_NAME
+    int I_VALUE
+    date LDDATE
+  }
+  AR_INFO {
+    int ORID
+    int ARID
+    int TIME_ERROR_CODE
+    int AZ_ERROR_CODE
+    int SLOW_ERROR_CODE
+    int SRC_DPNT_CORR_TYPE
+    string VMODEL
+    int TOTAL_TRAVEL_TIME
+    int TT_TABLE_VALUE
+    int ELLIP_CORR
+    int ELEV_CORR
+    int BULK_STATIC_STA_CORR
+    int TT_SRC_DPNT_CORR
+    int TT_MODEL_ERROR
+    int TT_MEAS_ERROR
+    int TT_MODEL_PLUS_MEAS_ERROR
+    int AZ_SRC_DPNT_CORR
+    int AZ_MODEL_ERROR
+    int AZ_MEAS_ERROR
+    int AZ_MODEL_PLUS_MEAS_ERROR
+    int SL_SRC_DPNT_CORR
+    int SL_MODEL_ERROR
+    int SL_MEAS_ERROR
+    int SL_MODEL_PLUS_MEAS_ERROR
+    int TIME_IMPORT
+    int AZ_IMPORT
+    int SLOW_IMPORT
+    int SLOW_VEC_RES
+    date LDDATE
+  }
+  ASSOC {
+    int ARID
+    int ORID
+    string STA
+    string PHASE
+    int BELIEF
+    int DELTA
+    int SEAZ
+    int ESAZ
+    int TIMERES
+    string TIMEDEF
+    int AZRES
+    string AZDEF
+    int SLORES
+    string SLODEF
+    int ERES
+    int WGT
+    string VMODEL
+    int COMMID
+    date LDDATE
+  }
+  EVENT {
+    int EVID PK
+    string EVNAME
+    int PREFOR
+    string AUTH
+    int COMMID
+    date LDDATE
+  }
+  EVENT_CONTROL {
+    int ORID
+    int EVID
+    int PREFER_LOC
+    int PREFER_MAG
+    int ORIG_ERR_METHOD
+    int MAG_METHOD
+    int OBS_CORR_METHOD
+    date LDDATE
+  }
+  EVENT_CORRELATION {
+    int EVID
+    int ORID
+    string STA
+    date TIME
+    string CHAN_LIST
+    int FILTERID
+    string SCAN_TYPE
+    string SCAN_STAGES
+    int CORRELATION_COEFFICIENT
+    string AUTHOR
+    string STAGE
+    date MODDATE
+    date LDDATE
+  }
+  NETMAG {
+    int MAGID PK
+    string NET
+    int ORID
+    int EVID
+    string MAGTYPE
+    int NSTA
+    int MAGNITUDE
+    int UNCERTAINTY
+    string AUTH
+    int COMMID
+    date LDDATE
+  }
+  ORIGERR {
+    int ORID
+    int SXX
+    int SYY
+    int SZZ
+    int STT
+    int SXY
+    int SXZ
+    int SYZ
+    int STX
+    int STY
+    int STZ
+    int SDOBS
+    int SDEPTH
+    int STIME
+    string CONF
+    int COMMID
+    date LDDATE
+  }
+  ORIGIN {
+    int LAT
+    int LON
+    int DEPTH
+    int TIME
+    int ORID PK
+    int EVID
+    int JDATE
+    int NASS
+    int NDEF
+    int NDP
+    int GRN
+    int SRN
+    string ETYPE
+    int DEPDP
+    string DTYPE
+    int MB
+    int MBID
+    int MS
+    int MSID
+    int ML
+    int MLID
+    string ALGORITHM
+    string AUTH
+    int COMMID
+    date LDDATE
+  }
+  QCMASKINFO {
+    int QCMASKID PK
+    string STA
+    string CHAN
+    int TIME
+    int ENDTIME
+    int SAMPRATE
+    int NSEG
+    int QCDEFID
+    string AUTH
+    date LDDATE
+  }
+  REMARK {
+    int COMMID PK
+    int LINENO
+    string REMARK
+    date LDDATE
+  }
+  STAMAG {
+    int MAGID
+    int AMPID
+    string STA
+    int ARID
+    int ORID
+    int EVID
+    string PHASE
+    int DELTA
+    string MAGTYPE
+    int MAGNITUDE
+    int UNCERTAINTY
+    int MAGRES
+    string MAGDEF
+    string MMODEL
+    string AUTH
+    int COMMID
+    date LDDATE
+  }
+  WFTAG {
+    string TAGNAME
+    int TAGID
+    int WFID
+    date LDDATE
+  }
+
+  ASSOC }o--|| ARRIVAL : "arid->ARID"
+  ASSOC }o--|| ORIGIN : "orid->ORID"
+  EVENT }o--|| ORIGIN : "prefor->ORID"
+  ORIGIN }o--|| EVENT : "evid->EVID"
+  AMPLITUDE }o--|| ARRIVAL : "arid->ARID"
+  AMPLITUDE_DYN_PARS_INT }o--|| AMPLITUDE : "ampid->AMPID"
+  ARRIVAL_DYN_PARS_INT }o--|| ARRIVAL : "arid->ARID"
+  STAMAG }o--|| AMPLITUDE : "ampid->AMPID"
+  STAMAG }o--|| ARRIVAL : "arid->ARID"
+  STAMAG }o--|| ORIGIN : "orid->ORID"
+  STAMAG }o--|| EVENT : "evid->EVID"
+  STAMAG }o--|| NETMAG : "magid->MAGID"
+  NETMAG }o--|| ORIGIN : "orid->ORID"
+  NETMAG }o--|| EVENT : "evid->EVID"
+  AR_INFO }o--|| ORIGIN : "orid->ORID"
+  AR_INFO }o--|| ARRIVAL : "arid->ARID"
+  ORIGERR }o--|| ORIGIN : "orid->ORID"
+  EVENT_CONTROL }o--|| EVENT : "evid->EVID"
+  EVENT_CONTROL }o--|| ORIGIN : "orid->ORID"
+  EVENT }o--|| REMARK : "commid->COMMID"
+  ORIGIN }o--|| REMARK : "commid->COMMID"
+  ARRIVAL }o--|| REMARK : "commid->COMMID"
+  ASSOC }o--|| REMARK : "commid->COMMID"
+  STAMAG }o--|| REMARK : "commid->COMMID"
+  NETMAG }o--|| REMARK : "commid->COMMID"
+  AMPLITUDE }o--|| REMARK : "commid->COMMID"
+  WFTAG }o--|| ACTIVE_ID : "tagname+tagid"

@@ -82,6 +82,15 @@ aws s3 cp "$DEPLOY_DIR/schema_data.json" "s3://$BUCKET_NAME/schema_data.json" \
     --content-type "application/json" \
     --cache-control "max-age=3600"
 
+# Upload images directory if it exists
+if [ -d "$DEPLOY_DIR/images" ]; then
+    echo "📸 Uploading diagram images..."
+    aws s3 cp "$DEPLOY_DIR/images/" "s3://$BUCKET_NAME/images/" \
+        --recursive \
+        --content-type "image/png" \
+        --cache-control "max-age=86400"
+fi
+
 echo "✅ Files uploaded successfully"
 
 # Step 5: Get website URL
