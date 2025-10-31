@@ -15,30 +15,103 @@ The Legacy and NDC PLUS schemas are designed to work together, with conceptual m
 
 ```mermaid
 graph LR
-    subgraph Legacy["Legacy Schema"]
-        L1[EVENT]
-        L2[ARRIVAL]
-        L3[AMPLITUDE]
-        L4[ORIGIN]
-        L5[STAMAG]
-        L6[NETMAG]
+    subgraph Legacy["🏛️ Legacy Schema"]
+        direction TB
+        subgraph LegacyEvent["Event Management"]
+            L_EVENT[EVENT]
+            L_EVENT_CONTROL[EVENT_CONTROL]
+            L_EVENT_CORRELATION[EVENT_CORRELATION]
+        end
+        subgraph LegacyMeasure["Measurements"]
+            L_ARRIVAL[ARRIVAL]
+            L_AMPLITUDE[AMPLITUDE]
+            L_AMPLITUDE_DYN[AMPLITUDE_DYN_PARS_INT]
+            L_ARRIVAL_DYN[ARRIVAL_DYN_PARS_INT]
+        end
+        subgraph LegacyLocation["Location Analysis"]
+            L_ORIGIN[ORIGIN]
+            L_ORIGERR[ORIGERR]
+            L_ASSOC[ASSOC]
+        end
+        subgraph LegacyMagnitude["Magnitude"]
+            L_STAMAG[STAMAG]
+            L_NETMAG[NETMAG]
+        end
+        subgraph LegacyMeta["Metadata"]
+            L_ACTIVE_ID[ACTIVE_ID]
+            L_WFTAG[WFTAG]
+            L_AR_INFO[AR_INFO]
+            L_REMARK[REMARK]
+            L_QCMASKINFO[QCMASKINFO]
+        end
     end
     
-    subgraph NDC["NDC PLUS Schema"]
-        N1[EVENT]
-        N2[FEATURE_MEASUREMENT_ARRIVAL_TIME]
-        N3[FEATURE_MEASUREMENT_AMPLITUDE]
-        N4[LOCATION_SOLUTION]
-        N5[STATION_MAGNITUDE_SOLUTION]
-        N6[NETWORK_MAGNITUDE_SOLUTION]
+    subgraph NDC["🚀 NDC PLUS Schema"]
+        direction TB
+        subgraph NDCChannel["Channel & Waveform"]
+            N_CHANNEL_SEGMENT[CHANNEL_SEGMENT]
+            N_CHANNEL_CREATION[CHANNEL_SEGMENT_CREATION]
+            N_CHANNEL_PROC[CHANNEL_SEGMENT_PROC_MASK_XREF]
+            N_CHANNEL_WAVEFORM[CHANNEL_SEGMENT_WAVEFORM]
+            N_STATION_CHANNEL[STATION_CHANNEL]
+        end
+        subgraph NDCEvent["Event Management"]
+            N_EVENT[EVENT]
+            N_EVENT_HYPOTHESIS[EVENT_HYPOTHESIS]
+            N_EVENT_HYPOTHESIS_TAG[EVENT_HYPOTHESIS_TAG]
+            N_EVENT_STATUS[EVENT_STATUS_INFO]
+            N_EVENT_CORRELATION[EVENT_CORRELATION]
+            N_EVENT_CORR_CHAN[EVENT_CORRELATION_CHANNEL_SEGMENT]
+        end
+        subgraph NDCFeatureMeas["Feature Measurements"]
+            N_FEAT_AMP[FEATURE_MEASUREMENT_AMPLITUDE]
+            N_FEAT_ARR[FEATURE_MEASUREMENT_ARRIVAL_TIME]
+            N_FEAT_ENUM[FEATURE_MEASUREMENT_ENUMERATED]
+            N_FEAT_NUM[FEATURE_MEASUREMENT_NUMERIC]
+        end
+        subgraph NDCFeaturePred["Feature Predictions"]
+            N_PRED_ARR[FEATURE_PREDICTION_ARRIVAL_TIME]
+            N_PRED_COMP[FEATURE_PREDICTION_COMPONENT]
+            N_PRED_NUM[FEATURE_PREDICTION_NUMERIC]
+        end
+        subgraph NDCLocation["Location & Uncertainty"]
+            N_LOC_SOL[LOCATION_SOLUTION]
+            N_LOC_BEHAV[LOCATION_BEHAVIOR]
+            N_LOC_RESTRAINT[LOCATION_RESTRAINT]
+            N_LOC_UNCERT[LOCATION_UNCERTAINTY]
+            N_LOC_ELLIPSE[LOCATION_UNCERTAINTY_ELLIPSE]
+            N_LOC_ELLIPSOID[LOCATION_UNCERTAINTY_ELLIPSOID]
+        end
+        subgraph NDCMagnitude["Magnitude"]
+            N_NET_MAG[NETWORK_MAGNITUDE_SOLUTION]
+            N_STA_MAG[STATION_MAGNITUDE_SOLUTION]
+        end
+        subgraph NDCQuality["Quality Control"]
+            N_PROC_MASK[PROCESSING_MASK]
+            N_PROC_QC[PROCESSING_MASK_QC_SEGMENT_VERSION]
+            N_QC_SEGMENT[QC_SEGMENT_VERSION]
+        end
+        subgraph NDCSignal["Signal Detection"]
+            N_SIGNAL_DET[SIGNAL_DETECTION_HYPOTHESIS]
+            N_INTERVAL[INTERVAL]
+        end
+        subgraph NDCMeta["Metadata & Config"]
+            N_STATION_GROUP[STATION_GROUP_VERSION]
+            N_RESPONSE[RESPONSE_TABLE]
+            N_REMARK[REMARK]
+            N_STAGE_METRICS[STAGE_METRICS]
+        end
     end
     
-    L1 -.->|"Maps to"| N1
-    L2 -.->|"Maps to"| N2
-    L3 -.->|"Maps to"| N3
-    L4 -.->|"Maps to"| N4
-    L5 -.->|"Maps to"| N5
-    L6 -.->|"Maps to"| N6
+    %% Cross-schema conceptual mappings
+    L_EVENT -.->|"Conceptual Mapping"| N_EVENT
+    L_ARRIVAL -.->|"Enhanced Measurement"| N_FEAT_ARR
+    L_AMPLITUDE -.->|"Enhanced Measurement"| N_FEAT_AMP
+    L_ORIGIN -.->|"Enhanced Location"| N_LOC_SOL
+    L_ASSOC -.->|"Advanced Detection"| N_SIGNAL_DET
+    L_STAMAG -.->|"Enhanced Magnitude"| N_STA_MAG
+    L_NETMAG -.->|"Enhanced Magnitude"| N_NET_MAG
+    L_REMARK -.->|"Direct Mapping"| N_REMARK
 ```
 
 ## Legacy Schema
@@ -78,13 +151,42 @@ The Legacy schema represents the traditional seismic monitoring database design,
 ### Legacy Schema Relationships
 ```mermaid
 graph TD
-    EVENT[EVENT] --> ORIGIN[ORIGIN]
-    ORIGIN --> ASSOC[ASSOC]
-    ASSOC --> ARRIVAL[ARRIVAL]
-    ARRIVAL --> AMPLITUDE[AMPLITUDE]
-    ORIGIN --> STAMAG[STAMAG]
-    STAMAG --> NETMAG[NETMAG]
-    ORIGIN --> ORIGERR[ORIGERR]
+    %% Event Management Flow
+    EVENT["📊 EVENT<br/>Master Records"] --> ORIGIN["🌍 ORIGIN<br/>Location Solutions"]
+    EVENT_CONTROL["⚙️ EVENT_CONTROL<br/>Processing Control"] --> EVENT
+    EVENT_CORRELATION["🔗 EVENT_CORRELATION<br/>Cross-correlation"] --> EVENT
+    
+    %% Location and Association
+    ORIGIN --> ASSOC["🔗 ASSOC<br/>Arrival Associations"]
+    ORIGIN --> ORIGERR["❌ ORIGERR<br/>Location Errors"]
+    ASSOC --> ARRIVAL["📡 ARRIVAL<br/>Phase Arrivals"]
+    
+    %% Amplitude and Magnitude
+    ARRIVAL --> AMPLITUDE["📈 AMPLITUDE<br/>Signal Measurements"]
+    AMPLITUDE --> AMPLITUDE_DYN_PARS_INT["⚙️ AMPLITUDE_DYN_PARS_INT<br/>Dynamic Parameters"]
+    ARRIVAL --> ARRIVAL_DYN_PARS_INT["⚙️ ARRIVAL_DYN_PARS_INT<br/>Dynamic Parameters"]
+    
+    %% Magnitude Calculations
+    AMPLITUDE --> STAMAG["📏 STAMAG<br/>Station Magnitude"]
+    STAMAG --> NETMAG["🌐 NETMAG<br/>Network Magnitude"]
+    
+    %% Metadata and Quality Control
+    ACTIVE_ID["🏷️ ACTIVE_ID<br/>Active Tags"] -.-> EVENT
+    WFTAG["🏷️ WFTAG<br/>Waveform Tags"] -.-> AMPLITUDE
+    AR_INFO["ℹ️ AR_INFO<br/>AR Model Info"] -.-> ARRIVAL
+    REMARK["💬 REMARK<br/>Comments"] -.-> EVENT
+    QCMASKINFO["✅ QCMASKINFO<br/>Quality Control"] -.-> ARRIVAL
+    
+    %% Styling
+    classDef eventClass fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef measureClass fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef locationClass fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
+    classDef metaClass fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    
+    class EVENT,EVENT_CONTROL,EVENT_CORRELATION eventClass
+    class ARRIVAL,AMPLITUDE,ARRIVAL_DYN_PARS_INT,AMPLITUDE_DYN_PARS_INT,STAMAG,NETMAG measureClass
+    class ORIGIN,ORIGERR,ASSOC locationClass
+    class ACTIVE_ID,WFTAG,AR_INFO,REMARK,QCMASKINFO metaClass
 ```
 
 ## NDC PLUS Schema
@@ -147,15 +249,62 @@ The NDC PLUS schema represents the modern, enhanced seismic monitoring database 
 ### NDC PLUS Schema Relationships
 ```mermaid
 graph TD
-    EVENT[EVENT] --> EVHYP[EVENT_HYPOTHESIS]
-    EVHYP --> LOCSOL[LOCATION_SOLUTION]
-    EVHYP --> SIGMAG[NETWORK_MAGNITUDE_SOLUTION]
-    SIGMAG --> STAMAG[STATION_MAGNITUDE_SOLUTION]
-    EVHYP --> SIGDET[SIGNAL_DETECTION_HYPOTHESIS]
-    SIGDET --> FEARR[FEATURE_MEASUREMENT_ARRIVAL_TIME]
-    SIGDET --> FEAMP[FEATURE_MEASUREMENT_AMPLITUDE]
-    CHANSEG[CHANNEL_SEGMENT] --> CHANWF[CHANNEL_SEGMENT_WAVEFORM]
-    STACHAN[STATION_CHANNEL] --> CHANSEG
+    %% Core Event Processing
+    SCENARIO["📋 SCENARIO<br/>Analysis Contexts"] --> SCENARIO_REVISION["🔄 SCENARIO_REVISION<br/>Version Control"]
+    SCENARIO_REVISION --> SCENARIO_EVENTS["🔗 SCENARIO_EVENTS<br/>Event Associations"]
+    SCENARIO_EVENTS --> SCENARIO_ORIGINS["📍 SCENARIO_ORIGINS<br/>Location Solutions"]
+    
+    %% Detection Processing
+    DETECTION_IDC["🔍 DETECTION_IDC<br/>IDC Detections"] --> CHANNEL_RESPONSE["📡 CHANNEL_RESPONSE<br/>Instrument Response"]
+    DETECTION_IDC --> WAVEFORM_SEGMENT["🌊 WAVEFORM_SEGMENT<br/>Data Segments"]
+    
+    %% Station and Network Data
+    STATION["🏠 STATION<br/>Site Information"] --> SITE["📍 SITE<br/>Geographic Locations"]
+    STATION --> CHANNEL["📊 CHANNEL<br/>Recording Channels"]
+    CHANNEL --> SENSOR["🔧 SENSOR<br/>Physical Sensors"]
+    CHANNEL --> CHANNEL_RESPONSE
+    
+    %% Magnitude Processing
+    MAGNITUDE_IDC["📏 MAGNITUDE_IDC<br/>IDC Magnitudes"] --> MAGNITUDE_METHOD_REFERENCE["📋 MAGNITUDE_METHOD_REFERENCE<br/>Calculation Methods"]
+    MAGNITUDE_IDC --> STATION_MAGNITUDE_IDC["📊 STATION_MAGNITUDE_IDC<br/>Station Values"]
+    
+    %% Observation and Analysis
+    OBSERVATION["👁️ OBSERVATION<br/>Analyst Observations"] --> PHASE_MEASUREMENT["⏱️ PHASE_MEASUREMENT<br/>Timing Measurements"]
+    OBSERVATION --> OBSERVATION_MAGNITUDE["📈 OBSERVATION_MAGNITUDE<br/>Magnitude Estimates"]
+    
+    %% Waveform Processing
+    WAVEFORM_SUMMARY["📊 WAVEFORM_SUMMARY<br/>Summary Statistics"] --> WAVEFORM_SEGMENT
+    FK_SPECTRUM_DEFINITION["🔄 FK_SPECTRUM_DEFINITION<br/>FK Analysis Setup"] --> FK_SPECTRA["🌈 FK_SPECTRA<br/>FK Results"]
+    
+    %% Calibration and Response
+    CALIBRATION["⚖️ CALIBRATION<br/>Instrument Calibration"] --> INSTRUMENT["🔧 INSTRUMENT<br/>Recording Equipment"]
+    INSTRUMENT --> SENSOR
+    RESPONSE["📈 RESPONSE<br/>Frequency Response"] --> CHANNEL_RESPONSE
+    
+    %% Reference Data
+    EARTH_MODEL["🌍 EARTH_MODEL<br/>Velocity Models"] -.-> SCENARIO
+    FILTER_DEFINITION["🔍 FILTER_DEFINITION<br/>Signal Filters"] -.-> WAVEFORM_SEGMENT
+    BEAM_RECIPE["📡 BEAM_RECIPE<br/>Array Processing"] -.-> CHANNEL
+    
+    %% Quality and Metadata
+    GIS_CONTINENT["🗺️ GIS_CONTINENT<br/>Geographic Regions"] -.-> SITE
+    QUALITY_SUMMARY["✅ QUALITY_SUMMARY<br/>Data Quality"] -.-> WAVEFORM_SEGMENT
+    
+    %% Styling
+    classDef scenarioClass fill:#e3f2fd,stroke:#0277bd,stroke-width:2px
+    classDef detectionClass fill:#f1f8e9,stroke:#33691e,stroke-width:2px
+    classDef stationClass fill:#fce4ec,stroke:#ad1457,stroke-width:2px
+    classDef magnitudeClass fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    classDef observationClass fill:#fff8e1,stroke:#f57f17,stroke-width:2px
+    classDef waveformClass fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
+    classDef referenceClass fill:#fafafa,stroke:#616161,stroke-width:2px
+    
+    class SCENARIO,SCENARIO_REVISION,SCENARIO_EVENTS,SCENARIO_ORIGINS scenarioClass
+    class DETECTION_IDC,OBSERVATION,PHASE_MEASUREMENT,OBSERVATION_MAGNITUDE detectionClass
+    class STATION,SITE,CHANNEL,SENSOR,INSTRUMENT stationClass
+    class MAGNITUDE_IDC,MAGNITUDE_METHOD_REFERENCE,STATION_MAGNITUDE_IDC magnitudeClass
+    class WAVEFORM_SUMMARY,WAVEFORM_SEGMENT,FK_SPECTRUM_DEFINITION,FK_SPECTRA waveformClass
+    class EARTH_MODEL,FILTER_DEFINITION,BEAM_RECIPE,GIS_CONTINENT,QUALITY_SUMMARY,CALIBRATION,RESPONSE,CHANNEL_RESPONSE referenceClass
 ```
 
 ## Detailed Table Specifications

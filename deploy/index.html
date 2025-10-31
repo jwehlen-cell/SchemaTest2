@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NDC PLUS & Legacy Database Schema Browser</title>
+    <meta name="description" content="Interactive browser for NDC PLUS and Legacy seismic monitoring database schemas. Explore 52 tables across both schemas with detailed relationships and specifications.">
+    <meta name="keywords" content="NDC PLUS, Legacy, database schema, seismic monitoring, Oracle database, schema browser">
+    <meta name="author" content="Schema Documentation System">
+    <meta property="og:title" content="NDC PLUS & Legacy Database Schema Browser">
+    <meta property="og:description" content="Interactive browser for seismic monitoring database schemas">
+    <meta property="og:type" content="website">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🗄️%3C/text%3E%3C/svg%3E">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 350px;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            overflow-y: auto;
+            position: fixed;
+            height: 100vh;
+        }
+        
+        .sidebar h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #3498db;
+        }
+        
+        .subtitle {
+            font-size: 14px;
+            color: #bdc3c7;
+            margin-bottom: 20px;
+        }
+        
+        .schema-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #34495e;
+        }
+        
+        .schema-tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            background-color: transparent;
+            border: none;
+            color: #bdc3c7;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .schema-tab.active {
+            color: #3498db;
+            border-bottom: 2px solid #3498db;
+            background-color: #34495e;
+        }
+        
+        .schema-tab:hover {
+            color: #3498db;
+            background-color: #34495e;
+        }
+        
+        .table-list {
+            list-style: none;
+        }
+        
+        .table-item {
+            margin-bottom: 8px;
+            padding: 8px 12px;
+            background-color: #34495e;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+        
+        .table-item:hover {
+            background-color: #3498db;
+            border-left-color: #e74c3c;
+            transform: translateX(5px);
+        }
+        
+        .table-item.active {
+            background-color: #e74c3c;
+            border-left-color: #c0392b;
+        }
+        
+        .table-name {
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .table-description {
+            font-size: 12px;
+            color: #bdc3c7;
+            margin-top: 2px;
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 350px;
+            padding: 20px;
+            background-color: white;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            color: white;
+            padding: 30px;
+            margin: -20px -20px 20px -20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        .welcome {
+            background-color: #ecf0f1;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .welcome h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .welcome p {
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+        
+        .table-detail {
+            display: none;
+        }
+        
+        .table-detail.active {
+            display: block;
+        }
+        
+        .table-header {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 20px;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .table-title {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .table-desc {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .table-info {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-top: none;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .info-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .info-label {
+            font-size: 12px;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .columns-section {
+            background-color: white;
+            border: 1px solid #dee2e6;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+        }
+        
+        .columns-header {
+            background-color: #34495e;
+            color: white;
+            padding: 15px 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .columns-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .columns-table th,
+        .columns-table td {
+            padding: 12px 20px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .columns-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            color: #2c3e50;
+            position: sticky;
+            top: 0;
+        }
+        
+        .columns-table tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .primary-key {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .badge-primary {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .badge-success {
+            background-color: #27ae60;
+            color: white;
+        }
+        
+        .badge-warning {
+            background-color: #f39c12;
+            color: white;
+        }
+        
+        .cross-references {
+            background-color: #e8f4f8;
+            border: 1px solid #3498db;
+            border-radius: 6px;
+            margin-top: 20px;
+            padding: 15px;
+        }
+        
+        .cross-references h4 {
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+        
+        .cross-ref-list {
+            list-style: none;
+        }
+        
+        .cross-ref-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #bdc3c7;
+        }
+        
+        .cross-ref-item:last-child {
+            border-bottom: none;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #7f8c8d;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h1>🗄️ Schema Browser</h1>
+            <p class="subtitle">NDC PLUS & Legacy Database Schemas</p>
+            
+            <div class="schema-tabs">
+                <button class="schema-tab active" data-schema="legacy">Legacy (17)</button>
+                <button class="schema-tab" data-schema="ndc_plus">NDC PLUS (35)</button>
+            </div>
+            
+            <ul class="table-list" id="tableList">
+                <!-- Tables will be populated by JavaScript -->
+            </ul>
+        </div>
+        
+        <div class="main-content">
+            <div class="header">
+                <h1>Database Schema Browser</h1>
+                <p>Interactive explorer for seismic monitoring database schemas</p>
+                <div class="stats">
+                    <div class="stat">
+                        <span class="stat-number">52</span>
+                        <span class="stat-label">Total Tables</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">2</span>
+                        <span class="stat-label">Schema Types</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">8</span>
+                        <span class="stat-label">Cross-References</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="welcomeSection" class="welcome">
+                <h2>Welcome to the Schema Browser</h2>
+                <p>Select a table from the sidebar to explore its structure and relationships.</p>
+                <p>Use the tabs above to switch between Legacy and NDC PLUS schemas.</p>
+                <p>This tool provides comprehensive documentation for both database schemas used in seismic event monitoring.</p>
+            </div>
+            
+            <div id="tableDetails">
+                <!-- Table details will be shown here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let schemaData = null;
+        let currentSchema = 'legacy';
+        let currentTable = null;
+
+        // Load schema data
+        async function loadSchemaData() {
+            try {
+                const response = await fetch('schema_data.json');
+                schemaData = await response.json();
+                initializeApp();
+            } catch (error) {
+                console.error('Error loading schema data:', error);
+                document.getElementById('tableDetails').innerHTML = `
+                    <div class="welcome">
+                        <h2>Error Loading Schema Data</h2>
+                        <p>Unable to load the schema data. Please ensure the schema_data.json file is available.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Initialize the application
+        function initializeApp() {
+            setupEventListeners();
+            showTableList('legacy');
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            document.querySelectorAll('.schema-tab').forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    const schema = e.target.dataset.schema;
+                    switchSchema(schema);
+                });
+            });
+        }
+
+        // Switch between schemas
+        function switchSchema(schema) {
+            currentSchema = schema;
+            
+            // Update active tab
+            document.querySelectorAll('.schema-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`[data-schema="${schema}"]`).classList.add('active');
+            
+            // Update table list
+            showTableList(schema);
+            
+            // Hide table details and show welcome
+            hideTableDetails();
+        }
+
+        // Show table list for a schema
+        function showTableList(schema) {
+            const tableList = document.getElementById('tableList');
+            const tables = schemaData.schemas[schema].tables;
+            
+            tableList.innerHTML = '';
+            
+            Object.keys(tables).forEach(tableName => {
+                const table = tables[tableName];
+                const li = document.createElement('li');
+                li.className = 'table-item';
+                li.dataset.table = tableName;
+                li.innerHTML = `
+                    <div class="table-name">${tableName}</div>
+                    <div class="table-description">${table.description}</div>
+                `;
+                
+                li.addEventListener('click', () => showTable(schema, tableName));
+                tableList.appendChild(li);
+            });
+        }
+
+        // Show table details
+        function showTable(schema, tableName) {
+            currentTable = tableName;
+            
+            // Update active table in sidebar
+            document.querySelectorAll('.table-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`[data-table="${tableName}"]`).classList.add('active');
+            
+            // Hide welcome section
+            document.getElementById('welcomeSection').style.display = 'none';
+            
+            // Show table details
+            const table = schemaData.schemas[schema].tables[tableName];
+            const columns = table.columns;
+            const columnCount = Object.keys(columns).length;
+            
+            let primaryKeys = [];
+            Object.keys(columns).forEach(colName => {
+                if (columns[colName].primary_key) {
+                    primaryKeys.push(colName);
+                }
+            });
+            
+            // Get cross-references
+            const crossRefs = getCrossReferences(schema, tableName);
+            
+            const detailsHTML = `
+                <div class="table-detail active">
+                    <div class="table-header">
+                        <div class="table-title">${tableName}</div>
+                        <div class="table-desc">${table.description}</div>
+                    </div>
+                    
+                    <div class="table-info">
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">Schema</div>
+                                <div class="info-value">${schema.toUpperCase()}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Column Count</div>
+                                <div class="info-value">${columnCount}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Primary Keys</div>
+                                <div class="info-value">${primaryKeys.length || 'None'}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Database Type</div>
+                                <div class="info-value">Oracle</div>
+                            </div>
+                        </div>
+                        
+                        ${crossRefs.length > 0 ? `
+                        <div class="cross-references">
+                            <h4>🔗 Cross-Schema References</h4>
+                            <ul class="cross-ref-list">
+                                ${crossRefs.map(ref => `
+                                    <li class="cross-ref-item">
+                                        <strong>${ref.description}</strong><br>
+                                        Maps to: ${ref.target_schema.toUpperCase()} → ${ref.target_table}
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="columns-section">
+                        <div class="columns-header">📊 Column Specifications</div>
+                        <table class="columns-table">
+                            <thead>
+                                <tr>
+                                    <th>Column Name</th>
+                                    <th>Type</th>
+                                    <th>Nullable</th>
+                                    <th>Primary Key</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${Object.keys(columns).map(colName => {
+                                    const col = columns[colName];
+                                    return `
+                                        <tr ${col.primary_key ? 'class="primary-key"' : ''}>
+                                            <td><strong>${colName}</strong></td>
+                                            <td>${col.oracle_type}</td>
+                                            <td>
+                                                <span class="badge ${col.nullable ? 'badge-warning' : 'badge-success'}">
+                                                    ${col.nullable ? 'Yes' : 'No'}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                ${col.primary_key ? '<span class="badge badge-primary">Yes</span>' : 'No'}
+                                            </td>
+                                        </tr>
+                                    `;
+                                }).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('tableDetails').innerHTML = detailsHTML;
+        }
+
+        // Get cross-references for a table
+        function getCrossReferences(schema, tableName) {
+            if (!schemaData.cross_schema_relationships) return [];
+            
+            return schemaData.cross_schema_relationships.filter(rel => 
+                (rel.legacy_table === tableName && schema === 'legacy') ||
+                (rel.ndc_plus_table === tableName && schema === 'ndc_plus')
+            ).map(rel => {
+                if (schema === 'legacy') {
+                    return {
+                        description: rel.description,
+                        target_schema: 'ndc_plus',
+                        target_table: rel.ndc_plus_table
+                    };
+                } else {
+                    return {
+                        description: rel.description,
+                        target_schema: 'legacy',
+                        target_table: rel.legacy_table
+                    };
+                }
+            });
+        }
+
+        // Hide table details
+        function hideTableDetails() {
+            document.getElementById('welcomeSection').style.display = 'block';
+            document.getElementById('tableDetails').innerHTML = '';
+            document.querySelectorAll('.table-item').forEach(item => {
+                item.classList.remove('active');
+            });
+        }
+
+        // Initialize the app when page loads
+        document.addEventListener('DOMContentLoaded', loadSchemaData);
+    </script>
