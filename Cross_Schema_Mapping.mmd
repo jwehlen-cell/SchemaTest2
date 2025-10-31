@@ -1,0 +1,62 @@
+flowchart LR
+  %% clusters (no special characters in titles)
+  subgraph LEGACY_CSS
+    class LEGACY_CSS legacy;
+    L_EVENT[LEG_EVENT]:::legacy
+    L_ORIGIN[LEG_ORIGIN]:::legacy
+    L_ARRIVAL[LEG_ARRIVAL]:::legacy
+    L_AMPL[LEG_AMPLITUDE]:::legacy
+    L_NETMAG[LEG_NETMAG]:::legacy
+    L_ORIGERR[LEG_ORIGERR]:::legacy
+    L_REMARK[LEG_REMARK]:::legacy
+    L_AID[LEG_ACTIVE_ID]:::legacy
+    L_WFTAG[LEG_WFTAG]:::legacy
+  end
+
+  subgraph NDC_PLUS
+    class NDC_PLUS plus;
+    P_EVENT[PLUS_EVENT]:::plus
+    P_EH[PLUS_EVENT_HYPOTHESIS]:::plus
+    P_LOC[PLUS_LOCATION_SOLUTION]:::plus
+    P_LU[PLUS_LOCATION_UNCERTAINTY]:::plus
+    P_SDH[PLUS_SIGNAL_DETECTION_HYPOTHESIS]:::plus
+    P_FM_AT[PLUS_FEATURE_MEASUREMENT_ARRIVAL_TIME]:::plus
+    P_FM_AMP[PLUS_FEATURE_MEASUREMENT_AMPLITUDE]:::plus
+    P_NMS[PLUS_NETWORK_MAGNITUDE_SOLUTION]:::plus
+    P_SM[PLUS_STAGE_METRICS]:::plus
+    P_REM[PLUS_REMARK]:::plus
+    P_CHSEG[PLUS_CHANNEL_SEGMENT]:::plus
+  end
+
+  %% intra (light)
+  L_ORIGIN -->|evid| L_EVENT
+  L_NETMAG -->|orid| L_ORIGIN
+  L_AMPL -->|arid| L_ARRIVAL
+  L_WFTAG -->|tagid| L_AID
+
+  P_EH -->|event_uuid| P_EVENT
+  P_LOC -->|event_hypothesis_uuid| P_EH
+
+  %% cross (dashed)
+  P_EVENT -.->|EVID ↔ EVID| L_EVENT
+  P_EH -.->|EVID,PREFOR| L_EVENT
+  P_LOC -.->|ORID| L_ORIGIN
+  P_LOC -.->|EVID| L_EVENT
+  P_LU -.->|ORID + covariance| L_ORIGERR
+  P_SDH -.->|ARID, CHAN, STASSID| L_ARRIVAL
+  P_FM_AT -.->|ARID| L_ARRIVAL
+  P_FM_AMP -.->|AMPID| L_AMPL
+  P_FM_AMP -.->|ARID| L_ARRIVAL
+  P_NMS -.->|MAGID, ORID, EVID| L_NETMAG
+  P_SM -.->|EVID| L_EVENT
+  P_SM -.->|ORID| L_ORIGIN
+  P_SM -.->|ARID| L_ARRIVAL
+  P_SM -.->|AMPID| L_AMPL
+  P_SM -.->|MAGID| L_NETMAG
+  P_REM -.->|REMARK_GID ↔ COMMID| L_REMARK
+  P_CHSEG -.->|TAGID| L_AID
+  P_CHSEG -.->|TAGID| L_WFTAG
+
+  %% color classes
+  classDef legacy fill:#e8f3ff,stroke:#5b8def,color:#0b3a74;
+  classDef plus fill:#fff3e0,stroke:#f39c12,color:#5c3b00;

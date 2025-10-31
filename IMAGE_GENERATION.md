@@ -2,15 +2,24 @@
 
 This directory contains tools and scripts for generating PNG images from Mermaid diagrams and including them in both the repository and website deployment.
 
-## 📁 Files Overview
+## 📁 Generated Files
 
 ### Mermaid Source Files
-- **`Legacy_schema.mmd`** - Entity Relationship Diagram for Legacy schema (17 tables)
-- **`NDC_PLUS_schema.mmd`** - Entity Relationship Diagram for NDC PLUS schema (35 tables)
+- `Legacy_schema.mmd` - Legacy database schema Entity Relationship Diagram
+- `NDC_PLUS_schema.mmd` - NDC PLUS database schema Entity Relationship Diagram  
+- `Cross_Schema_Mapping.mmd` - Cross-schema relationship mapping diagram
 
-### Generated Images
-- **`images/legacy_schema.png`** - PNG export of Legacy schema ERD
-- **`images/ndc_plus_schema.png`** - PNG export of NDC PLUS schema ERD
+### PNG Output Files
+
+#### Repository Images (`images/`)
+- `legacy_schema.png` - Legacy schema ER diagram (1920x1080)
+- `ndc_plus_schema.png` - NDC PLUS schema ER diagram (1920x1080)
+- `cross_schema_mapping.png` - Cross-schema relationship diagram (1920x1080)
+
+#### Website Images (`deploy/images/`)
+- `legacy_schema.png` - Legacy schema for website display
+- `ndc_plus_schema.png` - NDC PLUS schema for website display
+- `cross_schema_mapping.png` - Cross-schema mapping for website display
 
 ### Scripts
 - **`generate_images.sh`** - Main script to generate PNG images from .mmd files

@@ -40,11 +40,21 @@ else
     exit 1
 fi
 
+# Generate Cross Schema Mapping PNG
+echo "🔗 Generating Cross-Schema Mapping diagram..."
+if mmdc -i Cross_Schema_Mapping.mmd -o images/cross_schema_mapping.png -w 1920 -H 1080 --backgroundColor white; then
+    echo "✅ Cross-Schema Mapping PNG generated: images/cross_schema_mapping.png"
+else
+    echo "❌ Failed to generate Cross-Schema Mapping PNG"
+    exit 1
+fi
+
 # Copy images to deployment folder for website
 echo "📤 Copying images to deployment folder..."
 mkdir -p deploy/images
 cp images/legacy_schema.png deploy/images/
 cp images/ndc_plus_schema.png deploy/images/
+cp images/cross_schema_mapping.png deploy/images/
 
 echo ""
 echo "🎉 PNG Generation Complete!"
@@ -52,10 +62,12 @@ echo "==========================="
 echo "📁 Repository images:"
 echo "   • images/legacy_schema.png"
 echo "   • images/ndc_plus_schema.png"
+echo "   • images/cross_schema_mapping.png"
 echo ""
 echo "🌐 Website images:"
 echo "   • deploy/images/legacy_schema.png"
 echo "   • deploy/images/ndc_plus_schema.png"
+echo "   • deploy/images/cross_schema_mapping.png"
 echo ""
 echo "💡 Next steps:"
 echo "   • Review the generated images"
