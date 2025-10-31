@@ -1,84 +1,122 @@
-# SchemaTest1 - NDC PLUS Database Schema
+# SchemaTest2 - NDC PLUS and Legacy Database Schema Documentation
 
-A comprehensive database schema management system with visual documentation for the **NDC (National Data Center) PLUS** seismic monitoring system, presented with GitHub integration similar to Swagger for APIs.
+A comprehensive database schema management system with visual documentation for both the **Legacy** and **NDC PLUS** seismic monitoring systems, presented with GitHub integration similar to Swagger for APIs.
 
 ## 📊 Overview
 
-This repository maintains the NDC PLUS Oracle database schema with rich visual documentation rendered directly in GitHub. The schema supports seismic event monitoring, waveform analysis, and location determination.
+This repository maintains both Legacy and NDC PLUS Oracle database schemas with rich visual documentation rendered directly in GitHub. The schemas support seismic event monitoring, waveform analysis, and location determination with clear separation and cross-schema integration mapping.
 
 **Key Features**:
-- 📄 **Source Schema**: Original table definitions in text format
-- 🔄 **Automated Parser**: Python tool to extract and process schema
-- 📋 **JSON Schema**: Machine-readable schema specification
-- 📊 **Visual Documentation**: Mermaid diagrams showing entity relationships
-- 🎨 **Swagger-like Interface**: Comprehensive table and column documentation
+- 📄 **Dual Source Schemas**: Legacy (17 tables) and NDC PLUS (35 tables) table definitions
+- 🔄 **Enhanced Parser**: Python tool to extract and process both schema formats
+- 📋 **Unified JSON Schema**: Machine-readable schema specification for both systems
+- 📊 **Dual Visual Documentation**: Mermaid diagrams showing relationships within and between schemas
+- 🎨 **Enhanced Browser Interface**: Tabbed schema viewer with cross-schema navigation
+- 🔗 **Cross-Schema Mapping**: Clear identification of conceptual relationships between Legacy and NDC PLUS tables
 
 ## 🗂️ Repository Structure
 
 ```
-SchemaTest1/
-├── NDC_PLUS_tables.txt         # Source schema definition (35 tables)
+SchemaTest2/
+├── Legacy_tables.txt           # Legacy schema definition (17 tables)
+├── NDC_PLUS_tables.txt         # NDC PLUS schema definition (35 tables)
 ├── tools/
-│   └── parse_schema.py         # Schema parser and doc generator
+│   └── parse_schema.py         # Enhanced dual-schema parser and doc generator
 ├── schema/
 │   ├── docs/
-│   │   └── NDC_PLUS_SCHEMA.md  # Visual schema documentation
-│   └── ndc_plus_schema.json    # Machine-readable schema specification
+│   │   ├── DUAL_SCHEMA.md      # Comprehensive dual-schema documentation
+│   │   └── dual-schema-viewer.html # Interactive dual-schema browser
+│   └── dual_schema.json        # Machine-readable dual-schema specification
 └── README.md                    # This file
 ```
 
 ## 📖 Documentation
 
-### 🔍 View Complete Schema Documentation
+### 🔍 View Complete Dual Schema Documentation
 
-**[📊 NDC PLUS Schema Documentation](schema/docs/NDC_PLUS_SCHEMA.md)**
+**[📊 Dual Schema Documentation](schema/docs/DUAL_SCHEMA.md)**
 
 The documentation includes:
-- ✅ Table categorization by functional area
-- ✅ Interactive relationship diagrams (Mermaid)
-- ✅ Detailed specifications for all 35 tables
-- ✅ Column types, nullability, and primary keys
-- ✅ Foreign key relationships and references
-- ✅ Oracle-specific data types
+- ✅ **Schema Comparison**: Side-by-side comparison of Legacy vs NDC PLUS
+- ✅ **Cross-Schema Integration**: Mermaid diagrams showing conceptual mappings
+- ✅ **Separated Table Categories**: Organized by functional area for each schema
+- ✅ **Detailed Specifications**: Complete column information for all 52 tables
+- ✅ **Relationship Diagrams**: Both intra-schema and inter-schema relationships
+- ✅ **Oracle-Specific Support**: Handles different Oracle data type formats
 
-### 🎨 Interactive HTML Viewer
+### 🎨 Interactive Dual Schema Browser
 
-**[🌐 Open Schema Viewer](schema/docs/schema-viewer.html)** (requires local server)
+**[🌐 Open Dual Schema Viewer](schema/docs/dual-schema-viewer.html)** (requires local server)
 
-A Swagger-like interface for browsing the schema:
+A enhanced Swagger-like interface for browsing both schemas:
+- **Tabbed Interface**: Switch between Legacy and NDC PLUS schemas
+- **Categorized Navigation**: Tables organized by functional groups
+- **Search Functionality**: Find tables quickly across both schemas
+- **Cross-Schema References**: Clear indication of table mappings
+- **Professional Styling**: Modern, responsive design
 
-![Schema Viewer Overview](https://github.com/user-attachments/assets/ba4e7c0b-1342-4544-8367-b670d9ab78ff)
+![Schema Viewer Overview](docs/images/schema-viewer-overview.png)
 
 ![Table Detail View](https://github.com/user-attachments/assets/4bec93f9-5c13-4a67-8390-1d8007f38fb4)
 
-### 📊 Schema Statistics
+### 📊 Updated Schema Statistics
 
-- **Total Tables**: 35
-- **Database Type**: Oracle
-- **Primary Key Pattern**: UUID (RAW(16))
-- **Key Table Categories**:
-  - Channel & Waveform Data (5 tables)
-  - Event Management (6 tables)
-  - Feature Measurements (4 tables)
-  - Location & Uncertainty (6 tables)
-  - Magnitude Calculations (2 tables)
-  - Quality Control (3 tables)
-  - Signal Detection (2 tables)
-  - Metadata & Configuration (4 tables)
+- **Legacy Tables**: 17 (traditional seismic analysis)
+- **NDC PLUS Tables**: 35 (modern event processing)
+- **Total Combined**: 52 tables
+- **Cross-Schema Mappings**: 8 conceptual relationships
+- **Database Type**: Oracle (both systems)
 
-### Quick Relationship Overview
+## 🔗 Cross-Schema Integration
+
+The repository provides clear separation between Legacy and NDC PLUS schemas while highlighting their relationships:
+
+### Schema Mapping Overview
+
+| Legacy System | NDC PLUS System | Relationship Type |
+|---------------|-----------------|-------------------|
+| EVENT | EVENT | Direct conceptual mapping |
+| ARRIVAL | FEATURE_MEASUREMENT_ARRIVAL_TIME | Enhanced measurement system |
+| AMPLITUDE | FEATURE_MEASUREMENT_AMPLITUDE | Enhanced measurement system |
+| ORIGIN | LOCATION_SOLUTION | Enhanced location processing |
+| ASSOC | SIGNAL_DETECTION_HYPOTHESIS | Advanced signal detection |
+| STAMAG/NETMAG | STATION/NETWORK_MAGNITUDE_SOLUTION | Enhanced magnitude calculation |
+
+### Key Differences
+
+- **Legacy**: Traditional ID-based foreign keys (NUMBER types)
+- **NDC PLUS**: Modern UUID-based relationships (RAW(16) types)
+- **Legacy**: 17 tables focused on core seismic analysis
+- **NDC PLUS**: 35 tables with advanced processing capabilities
+
+### Updated Relationship Overview
 
 ```mermaid
-graph TD
-    EVENT[EVENT<br/>Seismic Events] --> EVHYP[EVENT_HYPOTHESIS<br/>Event Analysis]
-    EVHYP --> LOCSOL[LOCATION_SOLUTION<br/>Geographic Location]
-    EVHYP --> NETMAG[NETWORK_MAGNITUDE_SOLUTION<br/>Network Magnitude]
-    NETMAG --> STAMAG[STATION_MAGNITUDE_SOLUTION<br/>Station Magnitude]
-    EVHYP --> SIGDET[SIGNAL_DETECTION_HYPOTHESIS<br/>Signal Detection]
-    SIGDET --> FEARR[FEATURE_MEASUREMENT<br/>Arrival Time]
-    SIGDET --> FEAMP[FEATURE_MEASUREMENT<br/>Amplitude]
-    CHANSEG[CHANNEL_SEGMENT<br/>Time Series Data] --> CHANWF[Waveform Data]
-    STACHAN[STATION_CHANNEL<br/>Configuration] --> CHANSEG
+graph LR
+    subgraph Legacy["Legacy Schema"]
+        L1[EVENT]
+        L2[ARRIVAL]
+        L3[AMPLITUDE]
+        L4[ORIGIN]
+        L5[STAMAG]
+        L6[NETMAG]
+    end
+    
+    subgraph NDC["NDC PLUS Schema"]
+        N1[EVENT]
+        N2[FEATURE_MEASUREMENT_ARRIVAL_TIME]
+        N3[FEATURE_MEASUREMENT_AMPLITUDE]
+        N4[LOCATION_SOLUTION]
+        N5[STATION_MAGNITUDE_SOLUTION]
+        N6[NETWORK_MAGNITUDE_SOLUTION]
+    end
+    
+    L1 -.->|"Maps to"| N1
+    L2 -.->|"Maps to"| N2
+    L3 -.->|"Maps to"| N3
+    L4 -.->|"Maps to"| N4
+    L5 -.->|"Maps to"| N5
+    L6 -.->|"Maps to"| N6
 ```
 
 ## 🚀 Getting Started
@@ -90,6 +128,43 @@ graph TD
 - Git (for version control)
 
 ### Regenerating Documentation
+
+```bash
+# Run the enhanced dual-schema parser
+python tools/parse_schema.py
+
+# This generates:
+# - schema/dual_schema.json (machine-readable dual schema)
+# - schema/docs/DUAL_SCHEMA.md (comprehensive documentation)  
+# - schema/docs/dual-schema-viewer.html (interactive browser)
+```
+
+### View Documentation
+
+```bash
+# Option 1: View Markdown documentation
+open schema/docs/DUAL_SCHEMA.md
+
+# Option 2: Launch interactive dual-schema HTML viewer
+cd schema/docs
+python3 -m http.server 8000
+# Then visit: http://localhost:8000/dual-schema-viewer.html
+```
+
+## 🔧 Technical Details
+
+### Enhanced Parser Features
+
+The enhanced parser (`tools/parse_schema.py`) now supports:
+- **Dual Schema Processing**: Handles both Legacy and NDC PLUS formats
+- **Cross-Schema Relationship Detection**: Identifies conceptual mappings
+- **Enhanced JSON Output**: Structured format with schema separation
+- **Comprehensive Documentation**: Detailed markdown with visual diagrams
+- **Format Support**: Different table definition formats for each schema
+
+---
+
+*This repository demonstrates modern database documentation practices with clear schema evolution tracking and comprehensive cross-system integration mapping.*
 
 If you modify the schema or need to regenerate documentation:
 

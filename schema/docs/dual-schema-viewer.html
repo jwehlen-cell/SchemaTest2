@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NDC PLUS & Legacy Schema Browser</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 350px;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            overflow-y: auto;
+            position: fixed;
+            height: 100vh;
+        }
+        
+        .sidebar h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #3498db;
+        }
+        
+        .schema-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #34495e;
+        }
+        
+        .schema-tab {
+            flex: 1;
+            padding: 10px;
+            background: none;
+            border: none;
+            color: #ecf0f1;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        
+        .schema-tab.active {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .schema-tab:hover {
+            background-color: #34495e;
+        }
+        
+        .schema-content {
+            display: none;
+        }
+        
+        .schema-content.active {
+            display: block;
+        }
+        
+        .sidebar h2 {
+            font-size: 16px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: #ecf0f1;
+            border-bottom: 1px solid #34495e;
+            padding-bottom: 5px;
+        }
+        
+        .table-list {
+            list-style: none;
+        }
+        
+        .table-item {
+            margin: 5px 0;
+        }
+        
+        .table-link {
+            display: block;
+            padding: 8px 12px;
+            color: #bdc3c7;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            font-size: 14px;
+        }
+        
+        .table-link:hover {
+            background-color: #34495e;
+            color: #ecf0f1;
+        }
+        
+        .table-link.active {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #34495e;
+            border-radius: 4px;
+            background-color: #34495e;
+            color: white;
+            font-size: 14px;
+        }
+        
+        .search-box::placeholder {
+            color: #95a5a6;
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 350px;
+            padding: 30px;
+            background-color: white;
+            min-height: 100vh;
+        }
+        
+        .table-detail {
+            display: none;
+        }
+        
+        .table-detail.active {
+            display: block;
+        }
+        
+        .table-header {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .table-title {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .table-description {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        
+        .schema-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+        
+        .columns-section {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        .section-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+        
+        .columns-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        
+        .columns-table th {
+            background-color: #f8f9fa;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #2c3e50;
+            border-bottom: 2px solid #dee2e6;
+        }
+        
+        .columns-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #dee2e6;
+            vertical-align: top;
+        }
+        
+        .columns-table tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .column-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .column-type {
+            color: #7f8c8d;
+            font-family: 'Courier New', monospace;
+            background-color: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .badge.primary {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .badge.nullable {
+            background-color: #95a5a6;
+            color: white;
+        }
+        
+        .badge.not-null {
+            background-color: #27ae60;
+            color: white;
+        }
+        
+        .welcome {
+            text-align: center;
+            padding: 60px 30px;
+            color: #7f8c8d;
+        }
+        
+        .welcome h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        .welcome p {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            padding: 30px;
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            border-radius: 8px;
+            color: white;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .cross-reference {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e8f4fd;
+            border-left: 4px solid #3498db;
+            border-radius: 4px;
+        }
+        
+        .cross-reference h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .cross-reference p {
+            color: #7f8c8d;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h1>Schema Browser</h1>
+            
+            <input type="text" class="search-box" id="searchBox" placeholder="Search tables...">
+            
+            <div class="schema-tabs">
+                <button class="schema-tab active" onclick="switchSchema('legacy')">Legacy</button>
+                <button class="schema-tab" onclick="switchSchema('ndc_plus')">NDC PLUS</button>
+            </div>
+            
+            <div id="legacy-content" class="schema-content active">
+                <h2>Event Management</h2>
+                <ul class="table-list">
+                    <li class="table-item"><a href="#" class="table-link" onclick="showTable('EVENT', 'legacy')">EVENT</a></li>
+                    <li class="table-item"><a href="#" class="table-link" onclick="showTable('EVENT_CONTROL', 'legacy')">EVENT_CONTROL</a></li>
+                    <li class="table-item"><a href="#" class="table-link" onclick="showTable('EVENT_CORRELATION', 'legacy')">EVENT_CORRELATION</a></li>
+                </ul>
+                
+                <h2>Arrival & Measurements</h2>
+                <ul class="table-list">
+                    <li class="table-item"><a href="#" class="table-link" onclick="showTable('ARRIVAL', 'legacy')">ARRIVAL</a></li>
+                    <li class="table-item"><a href="#" class="table-link" onclick="showTable('AMPLITUDE', 'legacy')">AMPLITUDE</a></li>
+                    <li class="table-item"><a href="#" class="table-link" onclick="showTable('AMPLITUDE_DYN_PARS_INT', 'legacy')">AMPLITUDE_DYN_PARS_INT</a></li>
+                    <li class="table-item"><a href="#" class="table-link" onclick="showTable('ARRIVAL_DYN_PARS_INT', 'legacy')">ARRIVAL_DYN_PARS_INT</a></li>
+                </ul>
+                
+                <h2>Location Analysis</h2>
+                <ul class="table-list">
+                    <li class="table-item"><a href="#" class="table-link" onclick="showTable('ORIGIN', 'legacy')">ORIGIN</a></li>
+                    <li class="table-item"><a href="#" class="table-link" onclick="showTable('ORIGERR', 'legacy')">ORIGERR</a></li>
+                    <li class="table-item"><a href="#" class="table-link" onclick="showTable('ASSOC', 'legacy')">ASSOC</a></li>
+                </ul>
+                
+                <h2>Magnitude Calculations</h2>
+                <ul class="table-list">
+                    <li class="table-item"><a href="#" class="table-link" onclick="showTable('STAMAG', 'legacy')">STAMAG</a></li>
+                    <li class="table-item"><a href="#" class="table-link" onclick="showTable('NETMAG', 'legacy')">NETMAG</a></li>
+                </ul>
+                
+                <h2>Quality Control</h2>
+                <ul class="table-list">
+                    <li class="table-item"><a href="#" class="table-link" onclick="showTable('QCMASKINFO', 'legacy')">QCMASKINFO</a></li>
+                </ul>
+                
+                <h2>Metadata & Tags</h2>
+                <ul class="table-list">
+                    <li class="table-item"><a href="#" class="table-link" onclick="showTable('ACTIVE_ID', 'legacy')">ACTIVE_ID</a></li>
+                    <li class="table-item"><a href="#" class="table-link" onclick="showTable('WFTAG', 'legacy')">WFTAG</a></li>
+                    <li class="table-item"><a href="#" class="table-link" onclick="showTable('AR_INFO', 'legacy')">AR_INFO</a></li>
+                    <li class="table-item"><a href="#" class="table-link" onclick="showTable('REMARK', 'legacy')">REMARK</a></li>
+                </ul>
+            </div>
+            
+            <div id="ndc_plus-content" class="schema-content">
+                <h2>Channel & Waveform Data</h2>
+                <ul class="table-list">
+                    <li class="table-item"><a href="#" class="table-link" onclick="showTable('CHANNEL_SEGMENT', 'ndc_plus')">CHANNEL_SEGMENT</a></li>
+                    <li class="table-item"><a href="#" class="table-link" onclick="showTable('CHANNEL_SEGMENT_CREATION', 'ndc_plus')">CHANNEL_SEGMENT_CREATION</a></li>
+                    <li class="table-item"><a href="#" class="table-link" onclick="showTable('STATION_CHANNEL', 'ndc_plus')">STATION_CHANNEL</a></li>
+                </ul>
+                
+                <h2>Event Management</h2>
+                <ul class="table-list">
+                    <li class="table-item"><a href="#" class="table-link" onclick="showTable('EVENT', 'ndc_plus')">EVENT</a></li>
+                    <li class="table-item"><a href="#" class="table-link" onclick="showTable('EVENT_HYPOTHESIS', 'ndc_plus')">EVENT_HYPOTHESIS</a></li>
+                    <li class="table-item"><a href="#" class="table-link" onclick="showTable('EVENT_STATUS_INFO', 'ndc_plus')">EVENT_STATUS_INFO</a></li>
+                </ul>
+                
+                <h2>Feature Measurements</h2>
+                <ul class="table-list">
+                    <li class="table-item"><a href="#" class="table-link" onclick="showTable('FEATURE_MEASUREMENT_AMPLITUDE', 'ndc_plus')">FEATURE_MEASUREMENT_AMPLITUDE</a></li>
+                    <li class="table-item"><a href="#" class="table-link" onclick="showTable('FEATURE_MEASUREMENT_ARRIVAL_TIME', 'ndc_plus')">FEATURE_MEASUREMENT_ARRIVAL_TIME</a></li>
+                </ul>
+                
+                <h2>Location & Uncertainty</h2>
+                <ul class="table-list">
+                    <li class="table-item"><a href="#" class="table-link" onclick="showTable('LOCATION_SOLUTION', 'ndc_plus')">LOCATION_SOLUTION</a></li>
+                    <li class="table-item"><a href="#" class="table-link" onclick="showTable('LOCATION_UNCERTAINTY', 'ndc_plus')">LOCATION_UNCERTAINTY</a></li>
+                </ul>
+                
+                <h2>Magnitude Calculations</h2>
+                <ul class="table-list">
+                    <li class="table-item"><a href="#" class="table-link" onclick="showTable('NETWORK_MAGNITUDE_SOLUTION', 'ndc_plus')">NETWORK_MAGNITUDE_SOLUTION</a></li>
+                    <li class="table-item"><a href="#" class="table-link" onclick="showTable('STATION_MAGNITUDE_SOLUTION', 'ndc_plus')">STATION_MAGNITUDE_SOLUTION</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div id="welcome" class="welcome">
+                <h2>Welcome to the Schema Browser</h2>
+                <p>Explore the Legacy and NDC PLUS database schemas for seismic monitoring systems.</p>
+                <p>Use the sidebar to navigate between schemas and select tables for detailed information.</p>
+                
+                <div class="stats">
+                    <div class="stat">
+                        <span class="stat-number">17</span>
+                        <span class="stat-label">Legacy Tables</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">35</span>
+                        <span class="stat-label">NDC PLUS Tables</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">8</span>
+                        <span class="stat-label">Cross-Schema Mappings</span>
+                    </div>
+                </div>
+                
+                <div class="cross-reference">
+                    <h4>Cross-Schema Integration</h4>
+                    <p>The Legacy and NDC PLUS schemas work together with conceptual mappings between related tables. Legacy EVENT maps to NDC PLUS EVENT, Legacy ARRIVAL maps to FEATURE_MEASUREMENT_ARRIVAL_TIME, and so on.</p>
+                </div>
+            </div>
+            
+            <div id="table-details">
+                <!-- Table details will be loaded here dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // This would normally load from the dual_schema.json file
+        // For now, we'll add a placeholder that shows the structure works
+        
+        function switchSchema(schemaType) {
+            // Update tab states
+            document.querySelectorAll('.schema-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update content visibility
+            document.querySelectorAll('.schema-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(schemaType + '-content').classList.add('active');
+            
+            // Clear active table links
+            document.querySelectorAll('.table-link').forEach(link => link.classList.remove('active'));
+            
+            // Show welcome
+            showWelcome();
+        }
+        
+        function showTable(tableName, schema) {
+            // Clear active states
+            document.querySelectorAll('.table-link').forEach(link => link.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Hide welcome
+            document.getElementById('welcome').style.display = 'none';
+            
+            // Show table details (this would load from JSON in a real implementation)
+            const tableDetails = document.getElementById('table-details');
+            tableDetails.innerHTML = `
+                <div class="table-detail active">
+                    <div class="table-header">
+                        <div class="schema-badge">${schema.toUpperCase()} Schema</div>
+                        <h1 class="table-title">${tableName}</h1>
+                        <p class="table-description">Detailed information for ${tableName} table in the ${schema} schema.</p>
+                    </div>
+                    
+                    <div class="columns-section">
+                        <h2 class="section-title">Columns</h2>
+                        <table class="columns-table">
+                            <thead>
+                                <tr>
+                                    <th>Column Name</th>
+                                    <th>Data Type</th>
+                                    <th>Nullable</th>
+                                    <th>Primary Key</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="column-name">Loading...</td>
+                                    <td><span class="column-type">Loading...</span></td>
+                                    <td><span class="badge nullable">Loading...</span></td>
+                                    <td><span class="badge">Loading...</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="cross-reference">
+                        <h4>Cross-Schema Reference</h4>
+                        <p>This table conceptually maps to corresponding tables in the other schema system.</p>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function showWelcome() {
+            document.getElementById('welcome').style.display = 'block';
+            document.getElementById('table-details').innerHTML = '';
+        }
+        
+        // Search functionality
+        document.getElementById('searchBox').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const activeContent = document.querySelector('.schema-content.active');
+            const tableLinks = activeContent.querySelectorAll('.table-link');
+            
+            tableLinks.forEach(link => {
+                const tableName = link.textContent.toLowerCase();
+                const listItem = link.closest('.table-item');
+                
+                if (tableName.includes(searchTerm)) {
+                    listItem.style.display = 'block';
+                } else {
+                    listItem.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
