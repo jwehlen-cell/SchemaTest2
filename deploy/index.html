@@ -477,8 +477,8 @@
                 <p>Interactive explorer for seismic monitoring database schemas</p>
                 
                 <div class="view-tabs">
-                    <button class="view-tab active" onclick="showView('tables')">📊 Table Browser</button>
-                    <button class="view-tab" onclick="showView('diagrams')">📈 Entity Diagrams</button>
+                    <button class="view-tab active" onclick="showView('tables', this)">📊 Table Browser</button>
+                    <button class="view-tab" onclick="showView('diagrams', this)">📈 Entity Diagrams</button>
                 </div>
                 
                 <div class="stats">
@@ -545,7 +545,7 @@
         let currentTable = null;
 
         // View management functions
-        function showView(viewName) {
+        function showView(viewName, clickedTab) {
             // Hide all views
             document.querySelectorAll('.view-content').forEach(view => {
                 view.classList.remove('active');
@@ -560,7 +560,9 @@
             document.getElementById(viewName + '-view').classList.add('active');
             
             // Activate clicked tab
-            event.target.classList.add('active');
+            if (clickedTab) {
+                clickedTab.classList.add('active');
+            }
         }
         
         function openImageInNewTab(imageSrc) {
